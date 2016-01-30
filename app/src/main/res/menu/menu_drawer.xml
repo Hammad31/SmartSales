@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_home_page"
+            android:icon="@drawable/ic_nav_cart"
+            android:title="@string/menu_home_page"
+            android:checked="true"
+            />
+        <item
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_nav_new"
+            android:title="@string/menu_explore"/>
+        <item
+            android:id="@+id/nav_search"
+            android:icon="@drawable/ic_nav_promotion"
+            android:title="@string/menu_search"/>
+        <item
+            android:id="@+id/nav_cart"
+            android:icon="@drawable/ic_menu_cart"
+            android:title="@string/menu_cart"/>
+        <item
+            android:id="@+id/tt"
+            android:icon="@drawable/ic_menu_cart"
+            android:title="@string/offers"/>
+
+    </group>
+
+    <item android:title="Profile" >
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_orders"
+                android:icon="@drawable/ic_nav_clothing"
+                android:title="@string/menu_orders"/>
+            <item
+                android:id="@+id/nav_profile"
+                android:icon="@drawable/ic_nav_shoes"
+                android:title="@string/menu_profile"/>
+            </group>
+        </menu>
+    </item>
+
+</menu>

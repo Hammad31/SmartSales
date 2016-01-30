@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@color/grey_soft">
+
+        <TextView
+            android:id="@+id/companyName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello World"
+            android:layout_centerVertical="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textStyle="normal"
+            android:textSize="19sp"
+            android:padding="15dp"/>
+
+        <!-- this is the button that will trigger sliding of the expandable view -->
+        <ImageButton
+            android:id="@+id/expandable_toggle_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_increase"
+            android:background="@color/colorPrimaryLight"
+            />
+
+    </RelativeLayout>
+
+    <!-- this is the expandable view that is initially hidden and will slide out when the more button is pressed -->
+    <LinearLayout
+        android:id="@+id/expandable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#FFFFFF"
+        android:orientation="horizontal">
+
+        <!-- put whatever you want in the expandable view -->
+        <ListView
+            android:layout_margin="10dp"
+            android:id="@+id/unitsList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="true"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideOverlay"
+            android:scrollingCache="true"
+            android:smoothScrollbar="true" >
+
+        </ListView>
+    </LinearLayout>
+
+</LinearLayout>
