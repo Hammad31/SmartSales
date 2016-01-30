@@ -49,7 +49,7 @@ public class ActivityLogin extends AppCompatActivity {
     String email;
     String password;
     boolean checkTransfer = false;
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
