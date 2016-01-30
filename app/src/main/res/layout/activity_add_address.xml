@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:htext="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.app.sample.shop.ActivityAddAddress">
+
+    <include layout="@layout/toolbar" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                card_view:cardCornerRadius="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="Your Location:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+                <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/mapView"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginTop="45dp"
+                    android:padding="15dp" />
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:padding="15dp"
+                card_view:cardCornerRadius="5dp">
+
+                <TableLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="15dp"
+                    android:stretchColumns="1">
+
+                    <TableRow
+                        android:background="@color/colorAccent"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_column="1"
+                            android:layout_weight="1"
+                            android:text="Country"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/country"
+                            android:layout_width="0dip"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:background="@color/colorAccentDark"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_column="1"
+                            android:layout_weight="1"
+                            android:text="City"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/city"
+                            android:layout_width="0dip"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:background="@color/colorAccentLight"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_column="1"
+                            android:layout_weight="1"
+                            android:text="region"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/region"
+                            android:layout_width="0dip"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:background="@color/colorAccentDark"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_column="1"
+                            android:layout_weight="1"
+                            android:text="street"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/street"
+                            android:layout_width="0dip"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+                    </TableRow>
+
+                    <TableRow
+                        android:background="@color/colorAccent"
+                        android:padding="15dp">
+
+                        <TextView
+                            android:layout_width="0dip"
+                            android:layout_column="1"
+                            android:layout_weight="1"
+                            android:text="building"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+
+                        <EditText
+                            android:id="@+id/building"
+                            android:layout_width="0dip"
+                            android:layout_weight="1"
+                            android:gravity="right"
+                            android:hint="building"
+                            android:inputType="number"
+                            android:maxLength="3"
+                            android:textAlignment="center"
+                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Widget.Button"
+                            android:textColor="@color/colorWhite"
+                            android:textSize="18sp" />
+                    </TableRow>
+
+                </TableLayout>
+            </android.support.v7.widget.CardView>
+
+
+            <com.balysv.materialripple.MaterialRippleLayout
+                android:id="@+id/addAddress"
+                style="@style/RippleStyleWhite"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+
+                <Button
+                    android:id="@+id/save_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorAccent"
+                    android:text="Save Address"
+                    android:textColor="@color/colorWhite" />
+            </com.balysv.materialripple.MaterialRippleLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

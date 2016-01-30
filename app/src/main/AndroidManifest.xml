@@ -58,9 +58,10 @@
             android:label="@string/title_activity_maps" />
         <activity
             android:name=".ActivityLogin"
-            android:label="Login"></activity>
-        <activity android:name=".ActivityRegister"></activity>
-        <activity android:name=".ActivityAddresses"></activity>
+            android:label="Login" />
+        <activity android:name=".ActivityRegister" />
+        <activity android:name=".ActivityAddresses" />
+        <activity android:name=".ActivityAddAddress"></activity>
     </application>
 
 </manifest>

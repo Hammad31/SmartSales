@@ -1,5 +1,6 @@
 package com.app.sample.shop;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -8,9 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.app.sample.shop.adapter.AddressesAdapter;
 import com.app.sample.shop.model.Address;
+import com.balysv.materialripple.MaterialRippleLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +25,7 @@ public class ActivityAddresses extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AddressesAdapter addressesAdapter;
     private List<Address> addressList;
+    private Button buttonAdd;
 
     //Comment from laptop
     @Override
@@ -30,6 +36,15 @@ public class ActivityAddresses extends AppCompatActivity {
         initToolbar();
         initAddresses();
 
+        buttonAdd = (Button) findViewById(R.id.buttons);
+        buttonAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), "Add From Button", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(getApplicationContext(), ActivityAddAddress.class);
+                startActivity(i);
+            }
+        });
         recyclerView = (RecyclerView) findViewById(R.id.addresses_list);
         addressesAdapter = new AddressesAdapter(getApplicationContext(), addressList);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -68,9 +83,8 @@ public class ActivityAddresses extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
         actionBar.setTitle("Addresses");
-
-
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -82,5 +96,16 @@ public class ActivityAddresses extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //API Call here
 
+
+
+        //To update view
+        addressesAdapter.notifyDataSetChanged();
+        recyclerView.invalidate();
+
+    }
 }

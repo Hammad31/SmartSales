@@ -18,21 +18,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.balysv.materialripple.MaterialRippleLayout
-                style="@style/RippleStyleWhite"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_weight="1">
-
-                <Button
-                    android:id="@+id/buttons"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:background="@color/colorAccent"
-                    android:text="Add Address"
-                    android:textColor="@color/colorWhite" />
-            </com.balysv.materialripple.MaterialRippleLayout>
 
             <TextView
                 android:id="@+id/header"
@@ -50,6 +35,22 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/header" />
 
+            <com.balysv.materialripple.MaterialRippleLayout
+                style="@style/RippleStyleWhite"
+                android:id="@+id/addAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_weight="1">
+
+                <Button
+                    android:id="@+id/buttons"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:background="@color/colorAccent"
+                    android:text="Add Address"
+                    android:textColor="@color/colorWhite" />
+            </com.balysv.materialripple.MaterialRippleLayout>
 
         </RelativeLayout>
 
