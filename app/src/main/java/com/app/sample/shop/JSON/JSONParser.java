@@ -27,7 +27,7 @@ import android.util.Log;
  * Created by MOHAMMAD on 1/28/2016.
  */
 
-
+//
 public class JSONParser {
 
     static InputStream is = null;
