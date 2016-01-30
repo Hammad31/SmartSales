@@ -23,7 +23,6 @@ import android.widget.TextView;
 import com.app.sample.shop.R;
 import com.app.sample.shop.adapter.CartListAdapter;
 import com.app.sample.shop.data.GlobalVariable;
-import com.app.sample.shop.model.ItemModel;
 import com.app.sample.shop.model.Product;
 import com.app.sample.shop.widget.DividerItemDecoration;
 

@@ -47,12 +47,19 @@ public class ActivityAddresses extends AppCompatActivity {
             }
         });
         recyclerView = (RecyclerView) findViewById(R.id.addresses_list);
-        addressesAdapter = new AddressesAdapter(getApplicationContext(), addressList);
+        addressesAdapter = new AddressesAdapter(getApplicationContext(), addressList, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setHasFixedSize(true);
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(addressesAdapter);
+        recyclerView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+
+                return false;
+            }
+        });
         addressesAdapter.notifyDataSetChanged();
         recyclerView.invalidate();
     }
