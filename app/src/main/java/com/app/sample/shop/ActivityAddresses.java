@@ -26,8 +26,9 @@ public class ActivityAddresses extends AppCompatActivity {
     private AddressesAdapter addressesAdapter;
     private List<Address> addressList;
     private Button buttonAdd;
-
     //Comment from laptop
+    //Comment from my PC
+    //Comment from This for mohamed test
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
