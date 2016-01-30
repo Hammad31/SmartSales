@@ -21,6 +21,7 @@ public class ActivityAddresses extends AppCompatActivity {
     private AddressesAdapter addressesAdapter;
     private List<Address> addressList;
 
+    //Comment from laptop
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
