@@ -1,9 +1,11 @@
 package com.app.sample.shop.model;
 
+import java.io.Serializable;
+
 /**
  * Created by LENOVO on 1/29/2016.
  */
-public class Address {
+public class Address implements Serializable {
     private int AID;
     private String country, city, region, street, building;
     private double latitude, longitude;
