@@ -1,6 +1,8 @@
 package com.app.sample.shop.adapter;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.sample.shop.ActivityAddresses;
 import com.app.sample.shop.R;
 import com.app.sample.shop.model.Address;
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -21,10 +24,12 @@ import java.util.List;
 public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.ViewHolder> {
     private List<Address> addressList = new ArrayList();
     private Context context;
+    private ActivityAddresses activityAddresses;
 
-    public AddressesAdapter(Context context1, List list){
+    public AddressesAdapter(Context context1, List list, ActivityAddresses activityAddresses) {
         this.context = context1;
         this.addressList = list;
+        this.activityAddresses = activityAddresses;
     }
 
     @Override
@@ -35,7 +40,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.counter.setText("" + (position + 1));
         holder.country_city.setText(addressList.get(position).getCountry() + " - " + addressList.get(position).getCity());
         holder.region.setText("region:" + addressList.get(position).getRegion());
@@ -44,8 +49,41 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
         holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Open The Address Page
                 Toast.makeText(context, "The Address Clicked is : " + addressList.get(i).getStreet(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.lyt_parent.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(activityAddresses);
+                builder1.setMessage("Are you sure that you want to delete your address?");
+                builder1.setCancelable(true);
+                builder1.setTitle("Delete Address");
+
+                builder1.setPositiveButton(
+                        "Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                addressList.remove(position);
+                                //API Call To Remove Address with ID ..
+                                notifyDataSetChanged();
+                                dialog.cancel();
+                            }
+                        });
+
+                builder1.setNegativeButton(
+                        "No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Toast.makeText(context, "Address did not deleted", Toast.LENGTH_SHORT).show();
+                                dialog.cancel();
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+                return false;
             }
         });
     }

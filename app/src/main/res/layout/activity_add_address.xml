@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:htext="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -36,7 +35,7 @@
                 <com.google.android.gms.maps.MapView xmlns:android="http://schemas.android.com/apk/res/android"
                     android:id="@+id/mapView"
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="260dp"
                     android:layout_marginTop="45dp"
                     android:padding="15dp" />
 
@@ -176,7 +175,6 @@
 
                 </TableLayout>
             </android.support.v7.widget.CardView>
-
 
             <com.balysv.materialripple.MaterialRippleLayout
                 android:id="@+id/addAddress"

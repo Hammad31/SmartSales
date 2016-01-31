@@ -50,7 +50,9 @@
                     android:layout_margin="5dp"
                     android:text="Saudi Arabia - Riyadh"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textColor="@color/cardview_dark_background" />
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/region"
@@ -60,9 +62,10 @@
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
                     android:text="region: Exit 13"
-
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textColor="@color/cardview_dark_background" />
+
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/street"
@@ -71,20 +74,28 @@
                     android:layout_below="@+id/region"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="2dp"
-
                     android:text="street: king abdullah"
+
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
-                    android:textColor="@color/cardview_dark_background" />
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="20sp" />
 
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                <RelativeLayout
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@color/colorAccentLight"
-                    android:padding="3dp"
-                    android:src="@drawable/ic_info_loc_w" />
+                    android:background="@drawable/circuler_shape">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:src="@drawable/ic_info_loc_w" />
+
+
+                </RelativeLayout>
 
             </RelativeLayout>
 

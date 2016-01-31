@@ -15,6 +15,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -29,13 +31,14 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class ActivityAddAddress extends AppCompatActivity implements LocationListener {
+public class ActivityAddAddress extends AppCompatActivity implements LocationListener, GoogleMap.OnMapLongClickListener {
     LocationManager locationManager;
     String provider;
     TextView tvCountry, tvCity, tvRegion, tvStreet;
@@ -121,8 +124,16 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
 
     private void initMap() {
         googleMap = mMapView.getMap();
+        googleMap.setOnMapLongClickListener(this);
+
+    }
+
+    private void UpdateMapMarker() {
+        googleMap.clear();
+
         MarkerOptions marker = new MarkerOptions().position(
                 new LatLng(latitude, longitude)).title("Location").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+
         try {
             googleMap.addMarker(marker);
             CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -133,13 +144,30 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
         }
 
+        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+
+        try {
+            List<Address> address = geoCoder.getFromLocation(latitude, longitude, 1);
+            String full_address, region, street;
+            full_address = address.get(0).getAddressLine(0).substring(5);
+            street = full_address.split(",")[0].substring(4);
+            region = full_address.split(",")[1];
+
+            tvCountry.setText(address.get(0).getCountryName());
+            tvCity.setText(address.get(0).getLocality());
+            tvRegion.setText(region);
+            tvStreet.setText(street);
+            dialog.hide();
+        } catch (IOException e) {
+        } catch (NullPointerException e) {
+        }
+
 
     }
 
     @Override
     public void onLocationChanged(Location location) {
         if (!registered) {
-
             latitude = location.getLatitude();
             longitude = location.getLongitude();
             Toast.makeText(getApplicationContext(), "Lat: " + latitude + ", Lng: " + longitude, Toast.LENGTH_SHORT).show();
@@ -149,24 +177,8 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
             }
             locationManager.removeUpdates(this);
             initMap();
+            UpdateMapMarker();
 
-            Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-
-            try {
-                List<Address> address = geoCoder.getFromLocation(latitude, longitude, 1);
-                String full_address, region, street;
-                full_address = address.get(0).getAddressLine(0).substring(5);
-                street = full_address.split(",")[0].substring(4);
-                region = full_address.split(",")[1];
-
-                tvCountry.setText(address.get(0).getCountryName());
-                tvCity.setText(address.get(0).getLocality());
-                tvRegion.setText(region);
-                tvStreet.setText(street);
-                dialog.hide();
-            } catch (IOException e) {
-            } catch (NullPointerException e) {
-            }
 
         }
     }
@@ -191,7 +203,7 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
         locationManager.removeUpdates(this);
     }
 
-    private void SaveAddress(){
+    private void SaveAddress() {
         //API -- HERE
         newAddress.setCountry(tvCountry.getText().toString());
         newAddress.setCity(tvCity.getText().toString());
@@ -215,4 +227,10 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
 
     }
 
+    @Override
+    public void onMapLongClick(LatLng latLng) {
+        longitude = latLng.longitude;
+        latitude = latLng.latitude;
+        UpdateMapMarker();
+    }
 }
