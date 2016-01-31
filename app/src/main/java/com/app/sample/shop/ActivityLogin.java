@@ -103,6 +103,7 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     private void LoginDONE(String name, String CID) {
+        sessionManager.logoutUser();
         sessionManager.createLoginSession(name, email, CID);
         Toast.makeText(getApplicationContext(), "Welcome Back...", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getApplicationContext(), ActivityMain.class);

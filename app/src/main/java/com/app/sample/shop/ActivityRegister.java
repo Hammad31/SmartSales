@@ -95,6 +95,7 @@ public class ActivityRegister extends AppCompatActivity {
     }
 
     private void RegistrationDONE(String CID) {
+        sessionManager.logoutUser();
         sessionManager.createLoginSession(name, email, CID);
         Toast.makeText(getApplicationContext(), "Registration DONE...", Toast.LENGTH_SHORT).show();
         Intent i = new Intent(getApplicationContext(), ActivityMain.class);

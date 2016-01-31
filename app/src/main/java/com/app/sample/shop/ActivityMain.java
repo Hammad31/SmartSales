@@ -38,6 +38,7 @@ import com.app.sample.shop.fragment.CartFragment;
 import com.app.sample.shop.fragment.CategoryFragment;
 import com.app.sample.shop.fragment.Explore_Fragment;
 import com.app.sample.shop.fragment.Home_Page_Fragment;
+import com.app.sample.shop.fragment.OrderFragment;
 import com.app.sample.shop.fragment.ProfileFragment;
 import com.app.sample.shop.fragment.UnitDetailsFragment;
 import com.google.android.gms.appindexing.Action;
@@ -193,11 +194,10 @@ public class ActivityMain extends AppCompatActivity {
                 Snackbar.make(parent_view, "Credit Clicked", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.action_settings:
-                sessionManager.logoutUser();
+                sessionManager.logoutUser();// just for Testing logout (must remove)
                 Snackbar.make(parent_view, "Setting Clicked", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.action_me:
-                sessionManager.logoutUser();
                 Intent i = new Intent(getApplicationContext(), ActivityLogin.class);
                 startActivity(i);
                 break;
@@ -233,8 +233,13 @@ public class ActivityMain extends AppCompatActivity {
 
             //sub menu
             case R.id.nav_orders:
-                fragment = new CategoryFragment();
-                bundle.putString(CategoryFragment.TAG_CATEGORY, title);
+                if(sessionManager.isLoggedIn()) {
+                    fragment = new OrderFragment();
+                }else{
+                    fragment = new Home_Page_Fragment();
+                    Toast.makeText(getApplicationContext(), "You Must Login ...", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.nav_cart:
                 fragment = new CartFragment();
