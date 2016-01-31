@@ -61,6 +61,7 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         mBackground = mTypedValue.resourceId;
     }
 
+
     @Override
     public OrderProductsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
