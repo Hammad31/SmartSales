@@ -164,7 +164,7 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
             tvStreet.setText(street);
             dialog.hide();
         } catch (IOException e) {
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
         }
 
 
