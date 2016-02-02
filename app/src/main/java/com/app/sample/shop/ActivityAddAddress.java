@@ -3,6 +3,7 @@ package com.app.sample.shop;
 import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Criteria;
@@ -15,8 +16,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -31,7 +30,6 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.IOException;
@@ -104,6 +102,7 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
     }
 
     private void initToolbar() {
+        //Set the toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         actionBar = getSupportActionBar();
@@ -115,7 +114,13 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                //When the user click back button,
+                //No address will saved
+                //The activity result is RESULT_CANCELED
+
+                Intent intent = new Intent();
+                setResult(RESULT_CANCELED, intent);
+                finish();
                 return true;
         }
 
@@ -159,7 +164,7 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
             tvStreet.setText(street);
             dialog.hide();
         } catch (IOException e) {
-        } catch (NullPointerException e) {
+        } catch (Exception e) {
         }
 
 
@@ -170,7 +175,6 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
         if (!registered) {
             latitude = location.getLatitude();
             longitude = location.getLongitude();
-            Toast.makeText(getApplicationContext(), "Lat: " + latitude + ", Lng: " + longitude, Toast.LENGTH_SHORT).show();
             registered = true;
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
@@ -204,12 +208,24 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
     }
 
     private void SaveAddress() {
-        //API -- HERE
         newAddress.setCountry(tvCountry.getText().toString());
         newAddress.setCity(tvCity.getText().toString());
-        Toast.makeText(getApplicationContext(), newAddress.getCity(), Toast.LENGTH_SHORT).show();
-        onBackPressed();
+        newAddress.setBuilding(txtBuldingNum.getText().toString());
+        newAddress.setRegion(tvRegion.getText().toString());
+        newAddress.setLatitude(latitude);
+        newAddress.setLongitude(longitude);
+        newAddress.setStreet(tvStreet.getText().toString());
+        //API -- HERE
+        //Save The address to the server
 
+
+        //The new address object will be saved and send to the Addresses Activity
+        //RESULT_OK means it is OK and save it.
+
+        Intent intent = new Intent();
+        intent.putExtra("Address", newAddress);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

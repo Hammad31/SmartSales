@@ -1,7 +1,6 @@
 package com.app.sample.shop;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
@@ -30,7 +29,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-
 import com.app.sample.shop.data.Constant;
 import com.app.sample.shop.data.GlobalVariable;
 import com.app.sample.shop.data.SessionManager;
@@ -41,6 +39,9 @@ import com.app.sample.shop.fragment.Home_Page_Fragment;
 import com.app.sample.shop.fragment.OrderFragment;
 import com.app.sample.shop.fragment.ProfileFragment;
 import com.app.sample.shop.fragment.UnitDetailsFragment;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -62,15 +63,18 @@ public class ActivityMain extends AppCompatActivity {
      * See https://g.co/AppIndexing/AndroidStudio for more information.
      */
     private GoogleApiClient client;
+    private Tracker mTracker;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        parent_view = findViewById(R.id.main_content);
         global = (GlobalVariable) getApplication();
-
+        mTracker = global.getDefaultTracker();
+        mTracker.setScreenName("ActivityMain");
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
+        parent_view = findViewById(R.id.main_content);
         setupDrawerLayout();
         initToolbar();
 
@@ -79,7 +83,7 @@ public class ActivityMain extends AppCompatActivity {
 
 
         // email
-        if(sessionManager.isLoggedIn()) {
+        if (sessionManager.isLoggedIn()) {
             HashMap<String, String> user = sessionManager.getUserDetails();
             String name = user.get(SessionManager.KEY_NAME);
             String email = user.get(SessionManager.KEY_EMAIL);
@@ -89,7 +93,7 @@ public class ActivityMain extends AppCompatActivity {
 
             tvUsername.setText(name);
             tvEmail.setText(email);
-            Toast.makeText(getApplicationContext(), "Welcome Again " + name , Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Welcome Again " + name, Toast.LENGTH_SHORT).show();
         }
         // display first page
         displayView(R.id.nav_home_page, getString(R.string.menu_home_page));
@@ -106,6 +110,7 @@ public class ActivityMain extends AppCompatActivity {
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
+
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -198,17 +203,27 @@ public class ActivityMain extends AppCompatActivity {
                 Snackbar.make(parent_view, "Setting Clicked", Snackbar.LENGTH_SHORT).show();
                 break;
             case R.id.action_me:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("Login")
+                        .build());
+
                 Intent i = new Intent(getApplicationContext(), ActivityLogin.class);
                 startActivity(i);
                 break;
-            case R.id.action_about: {
+            case R.id.action_about:
+                mTracker.send(new HitBuilders.EventBuilder()
+                        .setCategory("Action")
+                        .setAction("About")
+                        .build());
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("About");
                 builder.setMessage(getString(R.string.about_text));
                 builder.setNeutralButton("OK", null);
                 builder.show();
                 break;
-            }
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -233,9 +248,9 @@ public class ActivityMain extends AppCompatActivity {
 
             //sub menu
             case R.id.nav_orders:
-                if(sessionManager.isLoggedIn()) {
+                if (sessionManager.isLoggedIn()) {
                     fragment = new OrderFragment();
-                }else{
+                } else {
                     fragment = new Home_Page_Fragment();
                     Toast.makeText(getApplicationContext(), "You Must Login ...", Toast.LENGTH_SHORT).show();
                 }

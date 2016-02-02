@@ -2,15 +2,26 @@ package com.app.sample.shop.data;
 
 import android.app.Application;
 
+import com.app.sample.shop.R;
 import com.app.sample.shop.model.Product;
 import com.app.sample.shop.model.Product;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GlobalVariable extends Application {
     private List<Product> cart = new ArrayList<>();
-
+    private Tracker mTracker;
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            // To enable debug logging use: adb shell setprop log.tag.GAv4 DEBUG
+            mTracker = analytics.newTracker(R.xml.app_tracker);
+        }
+        return mTracker;
+    }
     public void addCart(Product model) {
         cart.add(model);
     }

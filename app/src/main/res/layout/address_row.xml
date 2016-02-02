@@ -61,7 +61,7 @@
                     android:layout_below="@+id/count_back"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="5dp"
-                    android:text="region: Exit 13"
+                    android:text="Exit 13"
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
 
                     android:textColor="@color/cardview_dark_background"
@@ -74,7 +74,7 @@
                     android:layout_below="@+id/region"
                     android:layout_marginLeft="5dp"
                     android:layout_marginTop="2dp"
-                    android:text="street: king abdullah"
+                    android:text="king abdullah"
 
                     android:textAppearance="@style/TextAppearance.AppCompat.Button"
                     android:textColor="@color/cardview_dark_background"
