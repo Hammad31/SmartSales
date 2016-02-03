@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import com.app.sample.shop.ActivityAddresses;
 import com.app.sample.shop.R;
-import com.app.sample.shop.data.Constant;
 import com.app.sample.shop.model.Address;
 import com.balysv.materialripple.MaterialRippleLayout;
 
@@ -27,8 +26,6 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
     private List<Address> addressList = new ArrayList();
     private Context context;
     private ActivityAddresses activityAddresses;
-    //addressesLayout = The addresses layout
-    //noAddresses = The empty addresses massage
     public LinearLayout addressesLayout, noAddresses;
 
 
@@ -38,7 +35,7 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
         this.activityAddresses = activityAddresses;
         addressesLayout = (LinearLayout) activityAddresses.findViewById(R.id.addresses_layout);
         noAddresses = (LinearLayout) activityAddresses.findViewById(R.id.no_addresses);
-        //If no address, it will be empty addresses massage
+        //If no cards, it will be empty addresses massage
         updateView();
     }
 

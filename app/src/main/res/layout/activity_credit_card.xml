@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.app.sample.shop.ActivityAddresses">
+    tools:context="com.app.sample.shop.ActivityCreditCard">
 
     <include
         layout="@layout/toolbar"
@@ -15,8 +14,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="60dp">
+
         <LinearLayout
-            android:id="@+id/addresses_layout"
+            android:id="@+id/cards_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="visible">
@@ -30,16 +30,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
-                    android:text="Your Addresses:"
+                    android:text="Your Credit Cards:"
                     android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/addresses_list"
+                    android:id="@+id/cards_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="60dp"
-                    android:layout_below="@+id/header" />
+                    android:layout_below="@+id/header"
+                    android:layout_marginBottom="60dp" />
 
             </RelativeLayout>
         </LinearLayout>
@@ -47,40 +47,40 @@
     </RelativeLayout>
 
     <LinearLayout
-        android:id="@+id/no_addresses"
+        android:id="@+id/no_cards"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:paddingTop="60dp"
-        android:layout_centerHorizontal="true"
         android:visibility="invisible">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="10dp"
-            android:text="You have no addresses"
+            android:text="You have no credit cards"
             android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
         <RelativeLayout
-            android:layout_marginTop="80dp"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:background="@drawable/circuler_shape"
             android:layout_gravity="center"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/circuler_shape"
             android:gravity="center">
 
             <ImageView
-                android:layout_centerInParent="true"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_info_loc_w" />
+                android:layout_centerInParent="true"
+                android:src="@drawable/card_chip" />
 
         </RelativeLayout>
     </LinearLayout>
 
     <com.balysv.materialripple.MaterialRippleLayout
-        android:id="@+id/addAddress"
+        android:id="@+id/addCrditCard"
         style="@style/RippleStyleWhite"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -92,10 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorAccent"
-            android:text="Add Address"
+            android:text="Add Credit Card"
             android:textColor="@color/colorWhite" />
     </com.balysv.materialripple.MaterialRippleLayout>
-
 
 
 </RelativeLayout>

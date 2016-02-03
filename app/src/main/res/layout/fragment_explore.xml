@@ -30,9 +30,10 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:src="@drawable/feed_photo_7" />
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_companies" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -68,9 +69,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:src="@drawable/feed_photo_7" />
+                        android:src="@drawable/ic_best" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -106,9 +107,9 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="60dp"
-                        android:src="@drawable/feed_photo_7" />
+                        android:src="@drawable/ic_new" />
 
                     <TextView
                         android:layout_width="match_parent"
@@ -123,6 +124,7 @@
             </com.balysv.materialripple.MaterialRippleLayout>
 
         </android.support.v7.widget.CardView>
+
         <TextView
             android:id="@+id/test"
             android:layout_width="match_parent"

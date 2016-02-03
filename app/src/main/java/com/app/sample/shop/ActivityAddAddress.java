@@ -11,10 +11,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,7 +108,7 @@ public class ActivityAddAddress extends AppCompatActivity implements LocationLis
         actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeButtonEnabled(true);
-        actionBar.setTitle("Addresses");
+        actionBar.setTitle("Add Address");
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
