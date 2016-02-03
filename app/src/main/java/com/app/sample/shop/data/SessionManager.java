@@ -56,6 +56,7 @@ public class SessionManager {
         // Storing login value as TRUE
         editor.putBoolean(IS_LOGIN, true);
 
+
         // Storing name in pref
         editor.putString(KEY_NAME, name);
 
@@ -91,6 +92,9 @@ public class SessionManager {
 
     }
 
+    public  String getCurrentCustomerID(){
+        return pref.getString(KEY_ID,null);
+    }
 
 
     /**

@@ -76,10 +76,10 @@ public class OrderAdapter extends RecyclerView.Adapter<OrderAdapter.ViewHolder> 
     public void onBindViewHolder(ViewHolder holder, int position) {
         final Order order = original_items.get(position);
         holder.orderNumber.setText("order Number : "+order.getOrderID());
-        holder.orderStauts.setText("Status : " + order.getStatus());
-        holder.dateOfOrder.setText("Date Of Order : " + order.getDateOfOrder());
-        holder.deliverDate.setText("Deliver In : " + order.getDeliverDate());
-        holder.totalCost.setText("Total : $" + order.getTotalCost());
+        holder.orderStauts.setText("Status                 : " + order.getStatus());
+        holder.dateOfOrder.setText("Date Of Order  : " + order.getDateOfOrder().substring(0,10));
+        holder.deliverDate.setText("Deliver In           : " + order.getDeliverDate().substring(0,10));
+        holder.totalCost.setText("Total                   : $" + order.getTotalCost());
         holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

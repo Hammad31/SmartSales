@@ -16,9 +16,10 @@ public class Order {
     private int AdderessID;
     private int PaymentID;
     private int ShipperSID;
+    private int CustomerID;
     private ArrayList<Order_Products> orderProductses;
 
-    public Order(int orderID, String dateOfOrder, String status, int shippingCost, String deliverDate, int totalCost, int adderessID, int paymentID, int shipperSID, ArrayList<Order_Products> orderProductses) {
+    public Order(int orderID,int customerID, String dateOfOrder, String status, int shippingCost, String deliverDate, int totalCost, int adderessID, int paymentID, int shipperSID, ArrayList<Order_Products> orderProductses) {
         OrderID = orderID;
         this.dateOfOrder = dateOfOrder;
         this.status = status;
@@ -27,6 +28,7 @@ public class Order {
         TotalCost = totalCost;
         AdderessID = adderessID;
         PaymentID = paymentID;
+        CustomerID = customerID;
         ShipperSID = shipperSID;
         this.orderProductses = orderProductses;
     }
@@ -109,5 +111,13 @@ public class Order {
 
     public void setOrderProductses(ArrayList<Order_Products> orderProductses) {
         this.orderProductses = orderProductses;
+    }
+
+    public int getCustomerID() {
+        return CustomerID;
+    }
+
+    public void setCustomerID(int customerID) {
+        CustomerID = customerID;
     }
 }
