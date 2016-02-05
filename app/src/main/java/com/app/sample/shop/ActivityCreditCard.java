@@ -1,6 +1,8 @@
 package com.app.sample.shop;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,8 +16,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.app.sample.shop.adapter.CreditCardsAdapter;
+import com.app.sample.shop.data.SessionManager;
 import com.app.sample.shop.model.CreditCard;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,14 +38,22 @@ public class ActivityCreditCard extends AppCompatActivity {
     private List<CreditCard> creditCardList;
     private Button buttonAdd;
     private final static int ASK_LOCATION = 100;
-
+    private SessionManager sessionManager;
+    private ProgressDialog dialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit_card);
+        sessionManager = new SessionManager(getApplicationContext());
         creditCardList = new ArrayList<>();
         initToolbar();
         initCreditCards();
+
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading Your Location");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
 
         buttonAdd = (Button) findViewById(R.id.buttons);
         buttonAdd.setOnClickListener(new View.OnClickListener() {
@@ -58,25 +78,7 @@ public class ActivityCreditCard extends AppCompatActivity {
 
     private void initCreditCards() {
         //Call API Here to make the cards ready
-        CreditCard a1 = new CreditCard();
-        CreditCard a2 = new CreditCard();
-        a1.setCardID(1);
-        a1.setCVVNumber("123");
-        a1.setExpireData("04/06");
-        a1.setName("Hammad Al Hammad");
-        a1.setNumber("5500005555555559");
-        a1.setType("Visa");
-
-        a2.setCardID(2);
-        a2.setCVVNumber("456");
-        a2.setExpireData("10/10");
-        a2.setName("Mohammed Al Yahaya");
-        a2.setNumber("5500005555555559");
-        a2.setType("Visa");
-
-        creditCardList.add(a1);
-        creditCardList.add(a2);
-
+        new Connect().execute();
     }
 
     private void initToolbar() {
@@ -133,4 +135,86 @@ public class ActivityCreditCard extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Back Presses", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private class Connect extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+        List<CreditCard> newCreditCards = new ArrayList<>();
+        boolean empty = true;
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/Project/getCreditCards?CID=" + sessionManager.getCurrentCustomerID());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                JSONArray parentArray = parentObject.getJSONArray("CreditCards");
+
+                if (parentArray.length() < 1) {
+                    empty = true;
+                } else {
+                    empty = false;
+                    for (int i = 0; i < parentArray.length(); i++) {
+                        JSONObject childObject = parentArray.getJSONObject(i);
+                        String CID = childObject.getString("CID");
+                        String number = childObject.getString("number");
+                        String name = childObject.getString("name");
+                        String expireDate = childObject.getString("expireDate");
+                        int type = childObject.getInt("type");
+                        String CVVNumber = childObject.getString("CVVNumber");
+                        int CardID= childObject.getInt("CardID");
+
+                        CreditCard creditCard = new CreditCard();
+                        creditCard.setType(type);
+                        creditCard.setCVVNumber(CVVNumber);
+                        creditCard.setCardID(CardID);
+                        creditCard.setExpireData(expireDate);
+                        creditCard.setName(name);
+                        creditCard.setNumber(number);
+                        newCreditCards.add(creditCard);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Hammad" + e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            dialog.hide();
+            if (!empty) {
+                creditCardList.addAll(newCreditCards);
+                creditCardsAdapter.swapItems(creditCardList);
+                creditCardsAdapter.updateView();
+                creditCardsAdapter.notifyDataSetChanged();
+                recyclerView.invalidate();
+            } else {
+                System.out.println("It is empty man.!");
+            }
+        }
+    }
+
 }

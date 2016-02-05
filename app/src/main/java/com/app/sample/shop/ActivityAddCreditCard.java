@@ -1,37 +1,59 @@
 package com.app.sample.shop;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.EditText;
 
+import com.app.sample.shop.JSON.JSONParser;
+import com.app.sample.shop.data.SessionManager;
 import com.app.sample.shop.model.CreditCard;
+import com.dd.processbutton.iml.ActionProcessButton;
 import com.vinaygaba.creditcardview.CardType;
 import com.vinaygaba.creditcardview.CreditCardView;
 
-import java.util.regex.Pattern;
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityAddCreditCard extends AppCompatActivity {
     private ActionBar actionBar;
     private CreditCardView creditCardView;
-    private Button button;
+    private ActionProcessButton button;
+    private CreditCard creditCard;
+    private boolean saved = false;
+    SessionManager sessionManager;
+    JSONParser jParser = new JSONParser();
+    JSONObject json;
+    private String url_add_card = "http://hamoha.com/Project/addCreditCard";
+    private EditText input_cvv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_credit_card);
         initToolbar();
+        sessionManager = new SessionManager(getApplicationContext());
+        creditCard = new CreditCard();
         creditCardView = (CreditCardView) findViewById(R.id.card);
         creditCardView.setType(CardType.AUTO);
-        button = (Button) findViewById(R.id.save_card);
+        input_cvv = (EditText) findViewById(R.id.input_cvv);
+        button = (ActionProcessButton) findViewById(R.id.save_card);
+        button.setMode(ActionProcessButton.Mode.ENDLESS);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                button.setProgress(1);
                 SaveCrditCard();
             }
         });
@@ -64,48 +86,94 @@ public class ActivityAddCreditCard extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean CheckInput() {
+        try {
+            if (creditCardView.getCardName().length() > 0)
+                if (creditCardView.getCardNumber().length() >= 13 && creditCardView.getCardNumber().length() <= 16)
+                    if (creditCardView.getExpiryDate().length() > 0)
+                        if (input_cvv.getText().toString().length() == 3)
+                            if (creditCardView.getType() > 0)
+                                return true;
+        } catch (Exception e) {
+
+        }
+        return false;
+
+    }
+
     private void SaveCrditCard() {
-        CreditCard creditCard = new CreditCard();
+        if (!CheckInput()) {
+            Snackbar.make(getCurrentFocus(), "Please Check Your Input", Snackbar.LENGTH_SHORT).show();
+            button.setProgress(0);
+            return;
+        }
+
+        creditCard = new CreditCard();
         creditCard.setName(creditCardView.getCardName());
         creditCard.setNumber(creditCardView.getCardNumber());
         creditCard.setExpireData(creditCardView.getExpiryDate());
-        int type = creditCardView.getType();
-        String typeString = "";
-        switch (type) {
-            case 1:
-                typeString = "visa";
-                break;
-            case 2:
-                typeString = "mastercard";
-                break;
-            case 3:
-                typeString = "american_express";
-                break;
-            case 4:
-                typeString = "discover";
-                break;
-            case 5:
-                typeString = "visa";
-                break;
+        creditCard.setCVVNumber(input_cvv.getText().toString());
+        creditCard.setType(creditCardView.getType());
+        new SaveCreditCard().execute();
+    }
 
-        }
-        type = -1;
-        if(Pattern.compile("^5[1-5][0-9]{14}$").matcher(creditCard.getNumber()).matches()) {
-            type = 1;
-        } else if(Pattern.compile("^3[47][0-9]{13}$").matcher(creditCard.getNumber()).matches()) {
-            type = 2;
-        } else if(Pattern.compile("^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$").matcher(creditCard.getNumber()).matches()) {
-            type = 3;
-        }
-
-        Toast.makeText(getApplicationContext(), "Type is: " + type, Toast.LENGTH_SHORT).show();
-
-        creditCard.setType(typeString);
+    private void Complete() {
         Intent intent = new Intent();
         intent.putExtra("CreditCard", creditCard);
         setResult(RESULT_OK, intent);
         finish();
+    }
+
+
+    private class SaveCreditCard extends AsyncTask<Void, Void, Void> {
+        String CardID;
+
+        @Override
+        protected Void doInBackground(Void... args) {
+            saved = false;
+
+            List<NameValuePair> params = new ArrayList<NameValuePair>();
+            params.add(new BasicNameValuePair("CID", sessionManager.getCurrentCustomerID()));
+            params.add(new BasicNameValuePair("type", String.valueOf(creditCard.getType())));
+            params.add(new BasicNameValuePair("name", creditCard.getName()));
+            params.add(new BasicNameValuePair("CVVNumber", creditCard.getCVVNumber()));
+            params.add(new BasicNameValuePair("number", creditCard.getNumber()));
+            params.add(new BasicNameValuePair("expireDate", creditCard.getExpireData()));
+            json = jParser.makeHttpRequest(url_add_card, "GET", params);
+            String s = null;
+
+            try {
+                s = json.getString("info");
+                Log.d("Msg", json.getString("info"));
+                if (s.equals("success")) {
+                    saved = true;
+                    CardID = json.getString("CardID");
+                    creditCard.setCardID(Integer.valueOf(CardID));
+                    Log.d("Msg", CardID);
+                } else {
+                    Log.d("Msg", json.getString("Message"));
+                    saved = false;
+                }
+            } catch (Exception e) {
+                Log.d("Msg", e.getMessage());
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            if (saved) {
+                button.setProgress(100);
+                Complete();
+            } else {
+                Snackbar.make(getCurrentFocus(), "Sorry, Card did not saved", Snackbar.LENGTH_SHORT).show();
+                button.setProgress(0);
+            }
+        }
 
     }
+
 
 }

@@ -2,6 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,33 +27,62 @@
             android:padding="15dp"
             card_view:cardCornerRadius="5dp">
 
-            <TextView
-                android:id="@+id/header"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="15dp"
-                android:text="Fill Credit Card Details:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <com.vinaygaba.creditcardview.CreditCardView
-                android:id="@+id/card"
-                android:layout_width="fill_parent"
-                android:layout_height="225dp"
-                android:layout_marginBottom="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="60dp"
-                android:background="@drawable/cardbackground_world"
-                app:cardNameTextColor="#cccccc"
-                app:cardNumberFormat="all_digits"
-                app:cardNumberTextColor="#cccccc"
-                app:expiryDateTextColor="#cccccc"
-                app:hintTextColor="#cccccc"
-                app:isEditable="true"
-                app:putChip="true"
-                app:type="auto"
-                app:validTillTextColor="#cccccc" />
 
+                <TextView
+                    android:id="@+id/header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="15dp"
+                    android:text="Fill Credit Card Details:"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Title" />
+
+                <com.vinaygaba.creditcardview.CreditCardView
+                    android:id="@+id/card"
+                    android:layout_width="fill_parent"
+                    android:layout_height="225dp"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="20dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/cardbackground_world"
+                    app:cardNameTextColor="#cccccc"
+                    app:cardNumberFormat="all_digits"
+                    app:cardNumberTextColor="#cccccc"
+                    app:expiryDateTextColor="#cccccc"
+                    app:hintTextColor="#cccccc"
+                    app:isEditable="true"
+                    app:putChip="true"
+                    app:type="auto"
+                    app:validTillTextColor="#cccccc" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_email"
+                    android:layout_width="150dp"
+                    android:layout_height="53dp"
+                    android:textAlignment="center"
+                    android:layout_gravity="center"
+                    android:layout_toRightOf="@+id/icon_email"
+                    android:background="@color/colorWhite">
+
+                    <EditText
+                        android:id="@+id/input_cvv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="CVV Number"
+                        android:inputType="number"
+                        android:padding="10dp"
+                        android:maxLength="3"
+                        android:textAlignment="center"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Button"
+                        android:textSize="20sp" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
 
         </android.support.v7.widget.CardView>
 
@@ -68,13 +98,22 @@
         android:layout_weight="1">
 
 
-        <Button
+        <com.dd.processbutton.iml.ActionProcessButton
             android:id="@+id/save_card"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:background="@color/colorAccent"
             android:text="Save Credit Card"
-            android:textColor="@color/colorWhite" />
+            android:textColor="@color/colorWhite"
+            custom:pb_colorComplete="@color/green_complete"
+            custom:pb_colorError="@color/red_error"
+            custom:pb_colorNormal="@color/colorAccent"
+            custom:pb_colorPressed="@color/colorAccentDark"
+            custom:pb_colorProgress="@color/purple_progress"
+            custom:pb_textComplete="Success"
+            custom:pb_textError="Error"
+            custom:pb_textProgress="Loading" />
+
     </com.balysv.materialripple.MaterialRippleLayout>
 
 </RelativeLayout>

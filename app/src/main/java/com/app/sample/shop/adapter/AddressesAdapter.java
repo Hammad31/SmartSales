@@ -3,6 +3,7 @@ package com.app.sample.shop.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,14 @@ import com.app.sample.shop.R;
 import com.app.sample.shop.model.Address;
 import com.balysv.materialripple.MaterialRippleLayout;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,10 +98,13 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
                         "Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                //Remove it from the local data set
-                                addressList.remove(position);
                                 //Remove it from the server
+                                //Remove it from the local data set
                                 //API Here to delete address by id
+                                Connect connect = new Connect();
+                                connect.AID = addressList.get(position).getAID();
+                                connect.execute();
+                                addressList.remove(position);
                                 notifyDataSetChanged();
                                 updateView();
                                 dialog.cancel();
@@ -138,6 +150,50 @@ public class AddressesAdapter extends RecyclerView.Adapter<AddressesAdapter.View
             lyt_parent = (MaterialRippleLayout) v.findViewById(R.id.address_card);
         }
 
+    }
+
+    private class Connect extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+        int AID = 0;
+        boolean deleted = false;
+        @Override
+        protected Void doInBackground(Void... urls) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/Project/deleteAddress?AID=" + AID);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                System.out.println(parentObject.getString("info"));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
     }
 
 }
