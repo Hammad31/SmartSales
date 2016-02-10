@@ -2,13 +2,10 @@ package com.app.sample.shop.data;
 
 import android.util.Log;
 
-import com.app.sample.shop.model.Address;
 import com.app.sample.shop.model.CompanyUnit;
 import com.app.sample.shop.model.Order;
 import com.app.sample.shop.model.Product;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.app.sample.shop.model.Search;
 
 public class Constant {
 
@@ -29,4 +26,7 @@ public class Constant {
     public static Product currentProduct;
     public static CompanyUnit currentComapnyUnit;
     public static Order currentOrder;
+    public static Search search;
+
+
 }
