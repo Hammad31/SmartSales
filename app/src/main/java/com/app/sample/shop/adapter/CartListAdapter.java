@@ -15,8 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.activeandroid.query.Select;
 import com.app.sample.shop.ActivityItemDetails;
 import com.app.sample.shop.R;
+import com.app.sample.shop.data.GlobalVariable;
+import com.app.sample.shop.model.Cart_Product;
 import com.app.sample.shop.model.Product;
 import com.app.sample.shop.widget.RoundedTransformation;
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -95,7 +98,9 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         final Product p = filtered_items.get(position);
         holder.title.setText(p.getName());
         holder.category.setText(p.getType());
-        holder.total.setText(p.getPrice() + " X");
+        Cart_Product cart_product = (Cart_Product) new Select().from(Cart_Product.class).where("ProductID = ?", p.getPID()).execute().get(0);
+        holder.total.setText(cart_product.Quantity + " X");
+        holder.price.setText("$ " + p.getPrice());
         if (p.getPhoto().startsWith("http"))
             ImageLoader.getInstance().displayImage(p.getPhoto(), holder.image);
         else

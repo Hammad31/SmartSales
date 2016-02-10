@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -29,6 +30,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.activeandroid.Model;
+import com.activeandroid.query.Select;
 import com.app.sample.shop.data.Constant;
 import com.app.sample.shop.data.GlobalVariable;
 import com.app.sample.shop.data.SessionManager;
@@ -39,6 +42,9 @@ import com.app.sample.shop.fragment.Home_Page_Fragment;
 import com.app.sample.shop.fragment.OrderFragment;
 import com.app.sample.shop.fragment.ProfileFragment;
 import com.app.sample.shop.fragment.UnitDetailsFragment;
+import com.app.sample.shop.model.Address;
+import com.app.sample.shop.model.Cart_Product;
+import com.app.sample.shop.model.Product;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
@@ -46,7 +52,18 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ActivityMain extends AppCompatActivity {
     private DrawerLayout drawerLayout;
@@ -77,7 +94,7 @@ public class ActivityMain extends AppCompatActivity {
         parent_view = findViewById(R.id.main_content);
         setupDrawerLayout();
         initToolbar();
-
+        loadShippingCart();
         //Session Check
         sessionManager = new SessionManager(getApplicationContext());
 
@@ -111,6 +128,15 @@ public class ActivityMain extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    private void loadShippingCart() {
+        Connect connect = new Connect();
+        connect.cart_products = getCart();
+        connect.execute();
+    }
+
+    private List<Cart_Product> getCart(){
+        return  new Select().from(Cart_Product.class).execute();
+    }
 
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -196,7 +222,8 @@ public class ActivityMain extends AppCompatActivity {
                 actionBar.setTitle(R.string.menu_cart);
                 break;
             case R.id.action_credit:
-                Snackbar.make(parent_view, "Credit Clicked", Snackbar.LENGTH_SHORT).show();
+                Intent h = new Intent(getApplicationContext(), MapsActivity.class);
+                startActivity(h);
                 break;
             case R.id.action_settings:
                 sessionManager.logoutUser();// just for Testing logout (must remove)
@@ -242,8 +269,6 @@ public class ActivityMain extends AppCompatActivity {
                 fragment = new Explore_Fragment();
                 break;
             case R.id.nav_search:
-                fragment = new UnitDetailsFragment();
-                bundle.putString(CategoryFragment.TAG_CATEGORY, title);
                 break;
 
             //sub menu
@@ -337,5 +362,62 @@ public class ActivityMain extends AppCompatActivity {
         );
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
+    }
+
+    public class Connect extends AsyncTask<Void, Void, Void> {
+        public List<Cart_Product> cart_products;
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                for (int i = 0; i < cart_products.size(); i++) {
+                    URL url = new URL("http://hamoha.com/test/getProductDetails?PID=" + cart_products.get(i).ProductID);
+                    connection = (HttpURLConnection) url.openConnection();
+                    connection.connect();
+                    InputStream stream = connection.getInputStream();
+                    reader = new BufferedReader(new InputStreamReader(stream));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = "";
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line);
+                    }
+
+                    // Convert to JSON
+                    String finalJSON = buffer.toString();
+                    JSONObject parentObject = new JSONObject(finalJSON);
+                    String name = parentObject.getString("name");
+                    int quantity = parentObject.getInt("quantity");
+                    int PID = parentObject.getInt("PID");
+                    int CUID = parentObject.getInt("CUID");
+                    int ComID = parentObject.getInt("ComID");
+                    int CATALOGCatalogID = parentObject.getInt("CATALOGCatalogID");
+                    String date = parentObject.getString("date");
+                    String type = parentObject.getString("type");
+                    int price = parentObject.getInt("price");
+                    int like = parentObject.getInt("like");
+                    int sales = parentObject.getInt("sales");
+                    String info = parentObject.getString("info");
+                    String photo = parentObject.getString("link");
+                    String properties = parentObject.getString("properties");
+                    Product product = new Product(photo, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties);
+                    global.addCart(product, cart_products.get(i));
+                }
+
+            } catch (Exception e) {
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+
+        }
     }
 }
