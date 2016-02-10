@@ -90,7 +90,7 @@ public class OrderFragment extends Fragment {
             HttpURLConnection connection = null;
             BufferedReader reader=null;
             try{
-                URL url = new URL ("http://hamoha.com/Project/getOrders?CID="+ sessionManager.getCurrentCustomerID());
+                URL url = new URL ("http://192.168.1.119:8080/Project/getOrders?CID="+ sessionManager.getCurrentCustomerID());
 //                URL url = new URL ("http://hamoha.com/Project/getOrders");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();

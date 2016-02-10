@@ -1,6 +1,8 @@
 package com.app.sample.shop;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,11 +16,18 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.app.sample.shop.adapter.AddressesAdapter;
-import com.app.sample.shop.data.Constant;
+import com.app.sample.shop.data.SessionManager;
 import com.app.sample.shop.model.Address;
-import com.balysv.materialripple.MaterialRippleLayout;
 
-import java.io.Serializable;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +38,14 @@ public class ActivityAddresses extends AppCompatActivity {
     private List<Address> addressList;
     private Button buttonAdd;
     private final static int ASK_LOCATION = 100;
+    SessionManager sessionManager;
+    private ProgressDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_addresses);
+        sessionManager = new SessionManager(getApplicationContext());
         addressList = new ArrayList<>();
         initToolbar();
         initAddresses();
@@ -48,6 +60,12 @@ public class ActivityAddresses extends AppCompatActivity {
                 startActivityForResult(i, ASK_LOCATION);
             }
         });
+        dialog = new ProgressDialog(this);
+        dialog.setMessage("Loading Your Location");
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.show();
+
         recyclerView = (RecyclerView) findViewById(R.id.addresses_list);
         addressesAdapter = new AddressesAdapter(getApplicationContext(), addressList, this);
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
@@ -61,22 +79,7 @@ public class ActivityAddresses extends AppCompatActivity {
 
     private void initAddresses() {
         //Call API Here to make the addresses ready
-        Address a1 = new Address();
-        a1.setBuilding("12");
-        a1.setRegion("Exit 13");
-        a1.setCountry("Saudi Arabia");
-        a1.setStreet("King Abdullah");
-        a1.setCity("Riyadh");
-
-        Address a2 = new Address();
-        a2.setBuilding("12");
-        a2.setRegion("Exit 13");
-        a2.setCountry("Saudi Arabia");
-        a2.setStreet("King Abdullah");
-        a2.setCity("Riyadh");
-        addressList.add(a1);
-        addressList.add(a2);
-
+        new Connect().execute();
     }
 
     private void initToolbar() {
@@ -132,4 +135,92 @@ public class ActivityAddresses extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Back Presses", Toast.LENGTH_SHORT).show();
         }
     }
+
+    private class Connect extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+        List<Address> newAddresses = new ArrayList<>();
+        boolean empty = true;
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/Project/getAddresses?CID=" + sessionManager.getCurrentCustomerID());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                JSONArray parentArray = parentObject.getJSONArray("Addresses");
+
+                if (parentArray.length() < 1) {
+                    empty = true;
+                } else {
+                    empty = false;
+                    for (int i = 0; i < parentArray.length(); i++) {
+                        JSONObject childObject = parentArray.getJSONObject(i);
+                        String CID = childObject.getString("CID");
+                        String country = childObject.getString("country");
+                        String city = childObject.getString("city");
+                        String region = childObject.getString("region");
+                        String street = childObject.getString("street");
+                        String building = childObject.getString("building");
+                        double lon = childObject.getDouble("longitude");
+                        double lat = childObject.getDouble("latitude");
+                        int AID = childObject.getInt("AID");
+                        Address address = new Address();
+
+                        address.setRegion(region);
+                        address.setStreet(street);
+                        address.setBuilding(building);
+                        address.setLongitude(lon);
+                        address.setLatitude(lat);
+                        address.setCountry(country);
+                        address.setCity(city);
+                        address.setAID(AID);
+                        newAddresses.add(address);
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Hammad" + e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+            dialog.hide();
+            if (!empty) {
+                addressList.addAll(newAddresses);
+                addressesAdapter.swapItems(addressList);
+                addressesAdapter.updateView();
+                addressesAdapter.notifyDataSetChanged();
+                recyclerView.invalidate();
+            } else {
+                System.out.println("It is empty man.!");
+            }
+        }
+    }
+
+
 }

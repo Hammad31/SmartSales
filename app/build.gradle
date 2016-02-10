@@ -40,8 +40,6 @@ dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
     compile files('java-json.jar')
-
-//    compile 'com.android.support:multidex:1.0.1'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:cardview-v7:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
@@ -55,5 +53,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.github.vinaygaba:CreditCardView:v1.0.3'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
-
+    compile 'com.github.dmytrodanylyk.android-process-button:library:1.0.4'
 }

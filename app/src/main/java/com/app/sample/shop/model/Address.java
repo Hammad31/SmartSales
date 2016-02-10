@@ -9,6 +9,7 @@ public class Address implements Serializable {
     private int AID;
     private String country, city, region, street, building;
     private double latitude, longitude;
+    private String CID;
 
     public Address(int AID, String country, String city, String region, String street, String building, double latitude, double longitude) {
         this.AID = AID;
@@ -86,5 +87,13 @@ public class Address implements Serializable {
 
     public void setLongitude(double longitude) {
         this.longitude = longitude;
+    }
+
+    public void setCID(String CID) {
+        this.CID = CID;
+    }
+
+    public String getCID() {
+        return CID;
     }
 }

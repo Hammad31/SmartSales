@@ -7,10 +7,11 @@ import java.io.Serializable;
  */
 public class CreditCard implements Serializable {
     private int CardID;
-    private String type, name, CVVNumber, number;
+    private String  name, CVVNumber, number;
+    private int type;
     private String expireData;
 
-    public CreditCard(int cardID, String type, String name, String CVVNumber, String number, String expireData) {
+    public CreditCard(int cardID, int type, String name, String CVVNumber, String number, String expireData) {
         CardID = cardID;
         this.type = type;
         this.name = name;
@@ -31,11 +32,11 @@ public class CreditCard implements Serializable {
         CardID = cardID;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

@@ -3,6 +3,7 @@ package com.app.sample.shop.adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +18,14 @@ import com.vinaygaba.creditcardview.CardNumberFormat;
 import com.vinaygaba.creditcardview.CardType;
 import com.vinaygaba.creditcardview.CreditCardView;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,6 +104,9 @@ public class CreditCardsAdapter extends RecyclerView.Adapter<CreditCardsAdapter.
                         "Yes",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
+                                Connect connect = new Connect();
+                                connect.CardID = creditCardList.get(pos).getCardID();
+                                connect.execute();
                                 //Remove it from the local data set
                                 creditCardList.remove(pos);
                                 //Remove it from the server
@@ -137,5 +149,51 @@ public class CreditCardsAdapter extends RecyclerView.Adapter<CreditCardsAdapter.
             creditCardView = (CreditCardView) itemView.findViewById(R.id.card);
         }
     }
+
+
+    private class Connect extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+        int CardID = 0;
+        boolean deleted = false;
+        @Override
+        protected Void doInBackground(Void... urls) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/Project/deleteCreditCard?CardID=" + CardID);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                System.out.println(parentObject.getString("info"));
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+
 
 }
