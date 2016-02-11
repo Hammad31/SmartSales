@@ -100,8 +100,6 @@ public class ProductGridAdapter extends RecyclerView.Adapter<ProductGridAdapter.
             public void onClick(View view) {
                 Intent i = new Intent(context, ActivityItemDetails.class);
                 Constant.currentProduct = p;
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                //i.putExtra("Product", (Serializable) p);
                 context.startActivity(i);
             }
         });
