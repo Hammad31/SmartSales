@@ -60,7 +60,7 @@ public class Home_Page_Fragment extends android.support.v4.app.Fragment {
     private ArrayList<String> BrandsList;
     private ArrayList<String> LocationList;
     Search search = new Search();
-//    TextView xx;
+    //    TextView xx;
     ImageButton imageButton ;
     private static final String[]SortList = {"Price:Low To High" ,"Price:High To Low" ,"More Rating", "More Sales", "Recent Added"};
     private static final String[]PriceList = {"All Prices","From 1$ To 1000$", "From 1000$ To 1500$", "From 1500$ To 2500$","From 2500$ To 4500$", "Up 4500$"};
