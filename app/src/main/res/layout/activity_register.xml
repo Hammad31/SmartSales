@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_margin="30dp"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/logo_white_small" />
     </LinearLayout>
 
     <LinearLayout

@@ -15,20 +15,21 @@
             android:title="@string/menu_explore"/>
         <item
             android:id="@+id/nav_search"
-            android:icon="@drawable/ic_nav_promotion"
+            android:icon="@drawable/search_icon"
             android:title="@string/menu_search"/>
         <item
             android:id="@+id/nav_cart"
             android:icon="@drawable/ic_menu_cart"
             android:title="@string/menu_cart"/>
+<!--
         <item
             android:id="@+id/tt"
-            android:icon="@drawable/ic_menu_cart"
+            android:icon="@drawable/search_icon"
             android:title="@string/offers"/>
-
+-->
     </group>
 
-    <item android:title="Profile" >
+    <item android:title="Your Account" >
         <menu>
             <group android:checkableBehavior="single">
             <item
