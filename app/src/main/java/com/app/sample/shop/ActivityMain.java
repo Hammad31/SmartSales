@@ -395,7 +395,7 @@ public class ActivityMain extends AppCompatActivity {
                     int CATALOGCatalogID = parentObject.getInt("CATALOGCatalogID");
                     String date = parentObject.getString("date");
                     String type = parentObject.getString("type");
-                    int price = parentObject.getInt("price");
+                    double price = parentObject.getDouble("price");
                     int like = parentObject.getInt("like");
                     int sales = parentObject.getInt("sales");
                     String info = parentObject.getString("info");

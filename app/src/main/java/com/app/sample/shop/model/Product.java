@@ -19,13 +19,13 @@ public class Product {
     private int CATALOGCatalogID;
     private int CUID;
     private String date;
-    private int price;
+    private double price;
     private Blob image;
     private String photo;
 
 
 
-    public Product(String photo, int price, String date, int CUID, int CATALOGCatalogID, int comID, int PID, int quantity, String info, String type, String name,int like,int sales,String properties) {
+    public Product(String photo, double price, String date, int CUID, int CATALOGCatalogID, int comID, int PID, int quantity, String info, String type, String name,int like,int sales,String properties) {
         this.photo = photo;
         this.price = price;
         this.date = date;
@@ -62,7 +62,7 @@ public class Product {
         return type;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -82,7 +82,7 @@ public class Product {
         this.type = type;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 

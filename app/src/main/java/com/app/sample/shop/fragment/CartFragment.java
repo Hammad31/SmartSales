@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.app.sample.shop.ActicityCheckout;
@@ -29,6 +30,7 @@ import com.app.sample.shop.data.GlobalVariable;
 import com.app.sample.shop.data.SessionManager;
 import com.app.sample.shop.model.Cart_Product;
 import com.app.sample.shop.model.Product;
+import com.app.sample.shop.model.QuantityChecker;
 import com.app.sample.shop.widget.DividerItemDecoration;
 
 public class CartFragment extends Fragment {
@@ -102,7 +104,7 @@ public class CartFragment extends Fragment {
         final TextView qty = (TextView) dialog.findViewById(R.id.quantity);
         Cart_Product cart_product = (Cart_Product) new Select().from(Cart_Product.class).where("ProductID = ?", model.getPID()).execute().get(0);
         qty.setText(cart_product.Quantity + "");
-        if (cart_product.Quantity <= 1){
+        if (cart_product.Quantity <= 1) {
             ImageView a = (ImageView) dialog.findViewById(R.id.img_decrease);
             a.setVisibility(View.INVISIBLE);
         }
@@ -114,7 +116,7 @@ public class CartFragment extends Fragment {
                     cart_product.Quantity--;
                     cart_product.save();
                     qty.setText(cart_product.Quantity + "");
-                    if (cart_product.Quantity == 1){
+                    if (cart_product.Quantity == 1) {
                         ImageView a = (ImageView) dialog.findViewById(R.id.img_decrease);
                         a.setVisibility(View.INVISIBLE);
                     }
@@ -169,6 +171,9 @@ public class CartFragment extends Fragment {
     }
 
     private void checkoutConfirmation() {
+        boolean check = CheckInventory();
+        if (!check)
+            return;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Checkout Confirmation");
         builder.setMessage("Are you sure continue to checkout?");
@@ -185,6 +190,19 @@ public class CartFragment extends Fragment {
         });
         builder.setNegativeButton("No", null);
         builder.show();
+    }
+
+    private boolean CheckInventory() {
+        for (int i = 0; i < global.cart_products.size(); i++) {
+            QuantityChecker quantityChecker = new QuantityChecker(global.cart_products.get(i).ProductID, global.cart_products.get(i).Quantity);
+            //No available stock...
+            if (!quantityChecker.Check()) {
+                Toast.makeText(getContext(), global.getCart().get(i).getName() + ", Has no enough quantity", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "You can only buy " + quantityChecker.GetStockQuantity(), Toast.LENGTH_LONG).show();
+                return false;
+            }
+        }
+        return true;
     }
 
 }

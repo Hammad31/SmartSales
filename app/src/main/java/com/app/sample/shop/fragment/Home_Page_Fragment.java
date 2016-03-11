@@ -261,7 +261,7 @@ public class Home_Page_Fragment extends android.support.v4.app.Fragment {
                         int CATALOGCatalogID = JSONPro.getInt("CATALOGCatalogID");
                         String date = JSONPro.getString("date");
                         String type = JSONPro.getString("type");
-                        int price = JSONPro.getInt("price");
+                        double price = JSONPro.getDouble("price");
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");

@@ -111,7 +111,7 @@ public class CategoryFragment extends Fragment {
                     try {
                         product.setCompany(rs.getString("comName"));
                         product.setName(rs.getString("name"));
-                        product.setPrice(rs.getInt("price"));
+                        product.setPrice(rs.getDouble("price"));
                         product.setType(rs.getString("type"));
                         product.setImage(rs.getBlob("photo"));
                         items.add(product);

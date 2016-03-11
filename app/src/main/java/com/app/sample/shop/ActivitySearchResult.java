@@ -146,7 +146,7 @@ public class ActivitySearchResult extends AppCompatActivity {
                         int CATALOGCatalogID = JSONPro.getInt("CATALOGCatalogID");
                         String date = JSONPro.getString("date");
                         String type = JSONPro.getString("type");
-                        int price = JSONPro.getInt("price");
+                        double price = JSONPro.getDouble("price");
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");
@@ -196,7 +196,7 @@ public class ActivitySearchResult extends AppCompatActivity {
                         int CATALOGCatalogID = JSONPro.getInt("CATALOGCatalogID");
                         String date = JSONPro.getString("date");
                         String type = JSONPro.getString("type");
-                        int price = JSONPro.getInt("price");
+                        double price = JSONPro.getDouble("price");
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");

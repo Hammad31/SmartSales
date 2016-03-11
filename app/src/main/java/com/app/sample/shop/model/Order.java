@@ -2,24 +2,30 @@ package com.app.sample.shop.model;
 
 import java.util.ArrayList;
 
-/**
- * Created by MOHAMMAD on 1/30/2016.
- */
 public class Order {
 
     private int OrderID;
     private String dateOfOrder;
     private String status;
-    private int shippingCost;
+    private double shippingCost;
     private String deliverDate;
-    private int TotalCost;
+    private double TotalCost;
     private int AdderessID;
-    private int PaymentID;
     private int ShipperSID;
     private int CustomerID;
     private ArrayList<Order_Products> orderProductses;
+    private int shippingTime;
 
-    public Order(int orderID,int customerID, String dateOfOrder, String status, int shippingCost, String deliverDate, int totalCost, int adderessID, int paymentID, int shipperSID, ArrayList<Order_Products> orderProductses) {
+    public int getShippingTime() {
+        return shippingTime;
+    }
+
+    public void setShippingTime(int shippingTime) {
+        this.shippingTime = shippingTime;
+    }
+
+    public Order(){}
+    public Order(int orderID, int customerID, String dateOfOrder, String status, double shippingCost, String deliverDate, double totalCost, int adderessID, int shipperSID, ArrayList<Order_Products> orderProductses) {
         OrderID = orderID;
         this.dateOfOrder = dateOfOrder;
         this.status = status;
@@ -27,7 +33,6 @@ public class Order {
         this.deliverDate = deliverDate;
         TotalCost = totalCost;
         AdderessID = adderessID;
-        PaymentID = paymentID;
         CustomerID = customerID;
         ShipperSID = shipperSID;
         this.orderProductses = orderProductses;
@@ -57,11 +62,11 @@ public class Order {
         this.status = status;
     }
 
-    public int getShippingCost() {
+    public double getShippingCost() {
         return shippingCost;
     }
 
-    public void setShippingCost(int shippingCost) {
+    public void setShippingCost(double shippingCost) {
         this.shippingCost = shippingCost;
     }
 
@@ -73,11 +78,11 @@ public class Order {
         this.deliverDate = deliverDate;
     }
 
-    public int getTotalCost() {
+    public double getTotalCost() {
         return TotalCost;
     }
 
-    public void setTotalCost(int totalCost) {
+    public void setTotalCost(double totalCost) {
         TotalCost = totalCost;
     }
 
@@ -89,13 +94,7 @@ public class Order {
         AdderessID = adderessID;
     }
 
-    public int getPaymentID() {
-        return PaymentID;
-    }
 
-    public void setPaymentID(int paymentID) {
-        PaymentID = paymentID;
-    }
 
     public int getShipperSID() {
         return ShipperSID;

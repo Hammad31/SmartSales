@@ -2,8 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.app.sample.shop">
 
+    <!-- hardware features -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera.autofocus"
+        android:required="false" />
+    <!-- for card.io card scanning -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <!--
                  The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -72,8 +85,32 @@
             android:label="@string/title_activity_activity_search_result"></activity>
         <activity android:name=".ActicityCheckout"></activity>
 
-        <meta-data android:name="AA_DB_NAME" android:value="SmartSales.db" />
-        <meta-data android:name="AA_DB_VERSION" android:value="5" />
+        <!--Paypal Integration-->
+        <service
+            android:name="com.paypal.android.sdk.payments.PayPalService"
+            android:exported="false"/>
+
+        <activity
+            android:name="com.paypal.android.sdk.payments.PaymentActivity"/>
+        <activity
+            android:name="com.paypal.android.sdk.payments.LoginActivity"/>
+        <activity
+            android:name="com.paypal.android.sdk.payments.PaymentMethodActivity"/>
+        <activity
+            android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity"/>
+        <activity
+            android:name="io.card.payment.CardIOActivity"
+            android:configChanges="keyboardHidden|orientation"/>
+        <activity
+            android:name="io.card.payment.DataEntryActivity"/>
+
+
+        <meta-data
+            android:name="AA_DB_NAME"
+            android:value="SmartSales.db" />
+        <meta-data
+            android:name="AA_DB_VERSION"
+            android:value="5" />
         <meta-data
             android:name="AA_MODELS"
             android:value="com.app.sample.shop.model.Cart_Product" />

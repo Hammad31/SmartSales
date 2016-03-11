@@ -8,6 +8,7 @@ import com.app.sample.shop.model.Cart_Product;
 import com.app.sample.shop.model.Product;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
+import com.paypal.android.sdk.payments.PayPalConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,9 @@ public class GlobalVariable extends com.activeandroid.app.Application {
     public List<Cart_Product> cart_products = new ArrayList<>();
     public List<Product> cart = new ArrayList<>();
     private Tracker mTracker;
+    public PayPalConfiguration payPalConfiguration = new PayPalConfiguration()
+            .environment(PayPalConfiguration.ENVIRONMENT_NO_NETWORK)
+            .clientId("AT6nu0TQYqNe7-yq8WdGZw24yere5qEcjmzE_gnBVblp1N5LE4B_WkVS_Lblg9vXBKVljH2corTLmUqf");
 
     @Override
     public void onCreate() {
@@ -72,8 +76,8 @@ public class GlobalVariable extends com.activeandroid.app.Application {
         return cart;
     }
 
-    public long getCartPriceTotal() {
-        long total = 0;
+    public double getCartPriceTotal() {
+        double total = 0;
         for (int i = 0; i < cart.size(); i++) {
             total = total + (cart.get(i).getPrice() * cart_products.get(i).Quantity);
         }
