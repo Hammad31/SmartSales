@@ -159,6 +159,8 @@ public class Product {
     }
 
     public void setLike(int like) {
+        if (like < 0)
+            return;
         this.like = like;
     }
 

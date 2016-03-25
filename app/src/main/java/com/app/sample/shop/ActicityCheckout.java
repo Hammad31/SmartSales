@@ -53,6 +53,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class ActicityCheckout extends AppCompatActivity {
     private CartListAdapter cartListAdapter;
@@ -272,7 +273,17 @@ public class ActicityCheckout extends AppCompatActivity {
 
 
     private void SubmitOrder() {
-        new SubmitOrder().execute();
+        try {
+            new SubmitOrder().execute().get();
+            globalVariable.clearCart();
+            Intent intent = new Intent(getApplicationContext(), ActivityMain.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
     }
 
     private class ShippersConnect extends AsyncTask<Void, Void, Void> {

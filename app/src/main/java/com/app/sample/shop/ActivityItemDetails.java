@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -25,29 +26,52 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.activeandroid.query.Select;
 import com.app.sample.shop.adapter.CartListAdapter;
 import com.app.sample.shop.data.Constant;
 import com.app.sample.shop.data.GlobalVariable;
+import com.app.sample.shop.data.SessionManager;
 import com.app.sample.shop.model.Cart_Product;
+import com.app.sample.shop.model.CreditCard;
 import com.app.sample.shop.model.Product;
 import com.app.sample.shop.widget.DividerItemDecoration;
+import com.daimajia.slider.library.Animations.DescriptionAnimation;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ThreadPoolExecutor;
 
-public class ActivityItemDetails extends AppCompatActivity {
+public class ActivityItemDetails extends AppCompatActivity implements ViewPagerEx.OnPageChangeListener, BaseSliderView.OnSliderClickListener {
     public static final String EXTRA_OBJCT = "com.app.sample.shop.PRODUCT";
-
+    private SliderLayout mDemoSlider;
+    SessionManager sessionManager;
     //    private Product product;
     private Product product;
     private ActionBar actionBar;
     private GlobalVariable global;
     private View parent_view;
     private boolean in_cart = false;
+    private boolean liked_before;
+    private ImageView icon_like;
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -58,8 +82,16 @@ public class ActivityItemDetails extends AppCompatActivity {
         global = (GlobalVariable) getApplication();
         // Create default options which will be used for every
         //  displayImage(...) call if no options will be passed to this method
-        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
+        product = Constant.currentProduct;
+        sessionManager = new SessionManager(getApplicationContext());
+        icon_like = (ImageView) findViewById(R.id.icon_like);
 
+        try {
+            new CheckProductLike().execute().get();
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), "Check: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+        DisplayImageOptions defaultOptions = new DisplayImageOptions.Builder()
                 .cacheInMemory(true)
                 .cacheOnDisk(true)
                 .build();
@@ -69,15 +101,38 @@ public class ActivityItemDetails extends AppCompatActivity {
                 .build();
         ImageLoader.getInstance().init(config); // Do it on Application start
         // get extra object
-        product = Constant.currentProduct;
         initToolbar();
         ((TextView) findViewById(R.id.title)).setText(product.getName());
-        ImageView imageView = (ImageView) findViewById(R.id.image);
-        //ImageLoader.getInstance().displayImage("http://192.168.1.119:8080/Project/Image/" + product.getPhoto(), imageView);
-        if (product.getPhoto().startsWith("http"))
-            ImageLoader.getInstance().displayImage(product.getPhoto(), imageView);
-        else
-            ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + product.getPhoto(), imageView);
+        mDemoSlider = (SliderLayout) findViewById(R.id.slider);
+        HashMap<String, String> url_maps = new HashMap<String, String>();
+        for (int i = 0; i < 4; i++) {
+            if (product.getPhoto().startsWith("http"))
+                url_maps.put("" + i, product.getPhoto());
+            else
+                url_maps.put("" + i, "http://hamoha.com/Project/Image/" + product.getPhoto());
+        }
+        for (String name : url_maps.keySet()) {
+            TextSliderView textSliderView = new TextSliderView(this);
+            // initialize a SliderLayout
+            textSliderView
+                    .description(name)
+                    .image(url_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.CenterInside)
+                    .setOnSliderClickListener(this);
+
+            //add your extra information
+            textSliderView.bundle(new Bundle());
+            textSliderView.getBundle()
+                    .putString("extra", name);
+
+            mDemoSlider.addSlider(textSliderView);
+        }
+
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+        mDemoSlider.setCustomAnimation(new DescriptionAnimation());
+        mDemoSlider.setDuration(4000);
+        mDemoSlider.addOnPageChangeListener(this);
 
         ((TextView) findViewById(R.id.price)).setText("$" + product.getPrice());
         ((TextView) findViewById(R.id.likes)).setText("" + product.getLike() + " Like");
@@ -130,6 +185,12 @@ public class ActivityItemDetails extends AppCompatActivity {
         bt.setText("ADD TO CART");
         bt.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         in_cart = false;
+    }
+
+    @Override
+    protected void onStop() {
+        mDemoSlider.stopAutoCycle();
+        super.onStop();
     }
 
     @Override
@@ -217,7 +278,24 @@ public class ActivityItemDetails extends AppCompatActivity {
     public void actionClick(View view) {
         switch (view.getId()) {
             case R.id.lyt_likes:
-                Snackbar.make(view, "Likes Clicked", Snackbar.LENGTH_SHORT).show();
+                if (liked_before) {
+                    try {
+                        new UnLikeProduct().execute().get();
+                        Snackbar.make(view, "UnLiked", Snackbar.LENGTH_SHORT).show();
+
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "UnLikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                } else {
+                    try {
+                        new LikeProduct().execute().get();
+                        Snackbar.make(view, "Liked", Snackbar.LENGTH_SHORT).show();
+
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "LikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }
                 break;
             case R.id.lyt_sales:
                 Snackbar.make(view, "Sales Clicked", Snackbar.LENGTH_SHORT).show();
@@ -225,5 +303,212 @@ public class ActivityItemDetails extends AppCompatActivity {
 
         }
     }
+
+    private void MakeItLiked() {
+        icon_like.setImageResource(R.drawable.ic_love_medium);
+        liked_before = true;
+        ((TextView) findViewById(R.id.likes)).setText("" + product.getLike() + " Like");
+    }
+
+    private void MakeItUnLiked() {
+        icon_like.setImageResource(R.drawable.ic_no_love_medium);
+        liked_before = false;
+        ((TextView) findViewById(R.id.likes)).setText("" + product.getLike() + " Like");
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
+    }
+
+    //
+
+
+    private class CheckProductLike extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+        String out = "";
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/test/CheckProductLike?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                liked_before = !parentObject.getBoolean("Rated");
+                if (liked_before) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MakeItLiked();
+                        }
+                    });
+                } else {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MakeItUnLiked();
+                        }
+                    });
+                }
+            } catch (Exception e) {
+                System.out.println("Exception - : Check : " + e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    private class UnLikeProduct extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/test/UnLikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                String status = parentObject.getString("Status");
+                if (!status.equals("Fail")) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            product.setLike(product.getLike() - 1);
+                            MakeItUnLiked();
+                        }
+                    });
+                } else
+                    System.out.println("UnLike Failed");
+            } catch (Exception e) {
+                System.out.println("Exception - : Unlike : " + e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+
+    private class LikeProduct extends AsyncTask<Void, Void, Void> {
+        StringBuffer buffer;
+
+        @Override
+        protected Void doInBackground(Void... urls) {
+
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL("http://hamoha.com/test/LikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                buffer = new StringBuffer();
+                String line = "";
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line);
+                }
+
+                // Convert to JSON
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                String status = parentObject.getString("Status");
+                if (!status.equals("Fail")) {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            product.setLike(product.getLike() + 1);
+                            MakeItLiked();
+                        }
+                    });
+                } else
+                    System.out.println("Like Failed");
+            } catch (Exception e) {
+                System.out.println("Exception - : Like : " + e.getMessage());
+            } finally {
+                if (connection != null)
+                    connection.disconnect();
+                try {
+                    if (reader != null)
+                        reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            super.onPostExecute(result);
+        }
+    }
+
 
 }
