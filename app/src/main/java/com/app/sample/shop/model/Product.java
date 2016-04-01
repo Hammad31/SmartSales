@@ -1,6 +1,7 @@
 package com.app.sample.shop.model;
 
 import java.sql.Blob;
+import java.util.ArrayList;
 
 /**
  * Created by LENOVO on 1/10/2016.
@@ -21,11 +22,10 @@ public class Product {
     private String date;
     private double price;
     private Blob image;
-    private String photo;
+    private ArrayList<String> photo;
 
 
-
-    public Product(String photo, double price, String date, int CUID, int CATALOGCatalogID, int comID, int PID, int quantity, String info, String type, String name,int like,int sales,String properties) {
+    public Product(ArrayList<String> photo, double price, String date, int CUID, int CATALOGCatalogID, int comID, int PID, int quantity, String info, String type, String name, int like, int sales, String properties) {
         this.photo = photo;
         this.price = price;
         this.date = date;
@@ -89,6 +89,7 @@ public class Product {
     public void setImage(Blob image) {
         this.image = image;
     }
+
     public int getCUID() {
         return CUID;
     }
@@ -144,14 +145,14 @@ public class Product {
     public void setInfo(String info) {
         this.info = info;
     }
-    public String getPhoto() {
+
+    public ArrayList<String> getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(ArrayList<String> photo) {
         this.photo = photo;
     }
-
 
 
     public int getLike() {

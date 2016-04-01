@@ -134,8 +134,8 @@ public class ActivityMain extends AppCompatActivity {
         connect.execute();
     }
 
-    private List<Cart_Product> getCart(){
-        return  new Select().from(Cart_Product.class).execute();
+    private List<Cart_Product> getCart() {
+        return new Select().from(Cart_Product.class).execute();
     }
 
     private void initToolbar() {
@@ -373,7 +373,7 @@ public class ActivityMain extends AppCompatActivity {
             BufferedReader reader = null;
             try {
                 for (int i = 0; i < cart_products.size(); i++) {
-                    URL url = new URL("http://hamoha.com/test/getProductDetails?PID=" + cart_products.get(i).ProductID);
+                    URL url = new URL("http://hamoha.com/Project/getProductDetails?PID=" + cart_products.get(i).ProductID);
                     connection = (HttpURLConnection) url.openConnection();
                     connection.connect();
                     InputStream stream = connection.getInputStream();
@@ -399,9 +399,13 @@ public class ActivityMain extends AppCompatActivity {
                     int like = parentObject.getInt("like");
                     int sales = parentObject.getInt("sales");
                     String info = parentObject.getString("info");
-                    String photo = parentObject.getString("link");
                     String properties = parentObject.getString("properties");
-                    Product product = new Product(photo, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties);
+                    JSONArray photos = parentObject.getJSONArray("images");
+                    ArrayList<String> images_links = new ArrayList<>();
+                    for (int j = 0; j < photos.length(); j++) {
+                        images_links.add(photos.getString(j));
+                    }
+                    Product product = new Product(images_links, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties);
                     global.addCart(product, cart_products.get(i));
                 }
 

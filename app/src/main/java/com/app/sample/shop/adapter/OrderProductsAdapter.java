@@ -85,10 +85,10 @@ public class OrderProductsAdapter extends RecyclerView.Adapter<OrderProductsAdap
         holder.category.setText(p.getType());
         holder.total.setText(order_products.getQuantity() + " X");
         holder.price.setText("$"+p.getPrice());
-        if (p.getPhoto().startsWith("http"))
-            ImageLoader.getInstance().displayImage(p.getPhoto(), holder.image);
+        if (p.getPhoto().get(0).startsWith("http"))
+            ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);
         else
-            ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto(), holder.image);
+            ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto().get(0), holder.image);
 
 
     }

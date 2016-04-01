@@ -265,14 +265,19 @@ public class Home_Page_Fragment extends android.support.v4.app.Fragment {
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");
-                        String photo = JSONPro.getString("link");
                         String properties = JSONPro.getString("properties");
+                        JSONArray photos = JSONPro.getJSONArray("images");
+                        ArrayList<String> images_links = new ArrayList<>();
+                        for (int j = 0; j < photos.length(); j++) {
+                            images_links.add(photos.getString(j));
+                        }
 
-                        ProductList.add(new Product(photo,price, date, CUID, CATALOGCatalogID, ComID,PID ,quantity,info,type,name,like,sales,properties));
+                        ProductList.add(new Product(images_links,price, date, CUID, CATALOGCatalogID, ComID,PID ,quantity,info,type,name,like,sales,properties));
                     }
                     catalog.add(new Catalog(CatalogID,Cname,ProductList));
                 }
             }catch (Exception e){
+                System.out.println("Erorr, Home Page: " + e.getMessage());
 
             }finally {
                 if(connection!=null)

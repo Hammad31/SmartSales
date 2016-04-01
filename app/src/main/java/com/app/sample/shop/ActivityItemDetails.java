@@ -56,6 +56,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -72,7 +73,6 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
     private boolean in_cart = false;
     private boolean liked_before;
     private ImageView icon_like;
-
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,11 +105,11 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
         ((TextView) findViewById(R.id.title)).setText(product.getName());
         mDemoSlider = (SliderLayout) findViewById(R.id.slider);
         HashMap<String, String> url_maps = new HashMap<String, String>();
-        for (int i = 0; i < 4; i++) {
-            if (product.getPhoto().startsWith("http"))
-                url_maps.put("" + i, product.getPhoto());
+        for (int i = 0; i < product.getPhoto().size(); i++) {
+            if (product.getPhoto().get(i).startsWith("http"))
+                url_maps.put("" + i, product.getPhoto().get(i));
             else
-                url_maps.put("" + i, "http://hamoha.com/Project/Image/" + product.getPhoto());
+                url_maps.put("" + i, "http://hamoha.com/Project/Image/" + product.getPhoto().get(i));
         }
         for (String name : url_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(this);
@@ -349,7 +349,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/test/CheckProductLike?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                URL url = new URL("http://hamoha.com/Project/CheckProductLike?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();
@@ -409,7 +409,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/test/UnLikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                URL url = new URL("http://hamoha.com/Project/UnLikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();
@@ -464,7 +464,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/test/LikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
+                URL url = new URL("http://hamoha.com/Project/LikeProduct?CID=" + sessionManager.getCurrentCustomerID() + "&PID=" + product.getPID());
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();

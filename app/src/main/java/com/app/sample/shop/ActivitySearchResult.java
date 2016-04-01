@@ -150,9 +150,15 @@ public class ActivitySearchResult extends AppCompatActivity {
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");
-                        String photo = JSONPro.getString("link");
                         String properties = JSONPro.getString("properties");
-                        productsList.add(new Product(photo, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties));
+
+                        JSONArray photos = JSONPro.getJSONArray("images");
+                        ArrayList<String> images_links = new ArrayList<>();
+                        for (int j = 0; j < photos.length(); j++) {
+                            images_links.add(photos.getString(j));
+                        }
+
+                        productsList.add(new Product(images_links, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties));
                     }
                 }
             } catch (JSONException e) {
@@ -200,9 +206,14 @@ public class ActivitySearchResult extends AppCompatActivity {
                         int like = JSONPro.getInt("like");
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");
-                        String photo = JSONPro.getString("link");
                         String properties = JSONPro.getString("properties");
-                        productsList.add(new Product(photo, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties));
+                        JSONArray photos = JSONPro.getJSONArray("images");
+                        ArrayList<String> images_links = new ArrayList<>();
+                        for (int j = 0; j < photos.length(); j++) {
+                            images_links.add(photos.getString(j));
+                        }
+
+                        productsList.add(new Product(images_links, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties));
                     }
                 }
             } catch (JSONException e) {

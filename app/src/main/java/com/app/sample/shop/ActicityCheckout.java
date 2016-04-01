@@ -71,7 +71,7 @@ public class ActicityCheckout extends AppCompatActivity {
     private final static int ASK_ADDRESS = 100;
     private final static int ASK_CREDITCARD = 200;
     private final static int ASK_PAYMENT = 300;
-    private String url_submit_order = "http://hamoha.com/test/SubmitOrder";
+    private String url_submit_order = "http://hamoha.com/Project/SubmitOrder";
     private SessionManager sessionManager;
     JSONParser jParser = new JSONParser();
     JSONObject json;
@@ -295,7 +295,7 @@ public class ActicityCheckout extends AppCompatActivity {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/test/getShippers");
+                URL url = new URL("http://hamoha.com/Project/getShippers");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();

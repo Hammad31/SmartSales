@@ -50,7 +50,7 @@ public class QuantityChecker {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/test/getProductDetails?PID=" + PID);
+                URL url = new URL("http://hamoha.com/Project/getProductDetails?PID=" + PID);
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
                 InputStream stream = connection.getInputStream();

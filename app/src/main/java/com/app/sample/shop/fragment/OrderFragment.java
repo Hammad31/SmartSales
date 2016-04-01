@@ -146,9 +146,14 @@ public class OrderFragment extends Fragment {
                             int like = 0;
                             int sales = 0;
                             String info = Product.getString("info");
-                            String photo = Product.getString("link");
                             String properties = null;
-                            orderProductsList.add(new Order_Products(OrderIDForSingleOrderProduct, ProductID, quantityForJSONSingleOrderProduct, new Product(photo, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties)));
+                            JSONArray photos = Product.getJSONArray("images");
+                            ArrayList<String> images_links = new ArrayList<>();
+                            for (int j = 0; j < photos.length(); j++) {
+                                images_links.add(photos.getString(j));
+                            }
+
+                            orderProductsList.add(new Order_Products(OrderIDForSingleOrderProduct, ProductID, quantityForJSONSingleOrderProduct, new Product(images_links, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties)));
                         }
                         orders.add(new Order(OrderID, CustomerID, dateOfOrder, status, shippingCost, deliverDate, TotalCost, AdderessID, ShipperSID, orderProductsList));
                     }
