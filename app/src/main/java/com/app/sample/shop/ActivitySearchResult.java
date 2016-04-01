@@ -229,7 +229,7 @@ public class ActivitySearchResult extends AppCompatActivity {
             Product_RecyclerView.invalidate();
             if (productsList.isEmpty()){
                 xx2.setVisibility(View.VISIBLE);
-                xx2.setText("There Is No Match Products !!");
+                xx2.setText("There Is No Match Products !");
                 img.setVisibility(View.VISIBLE);
             }
         }
