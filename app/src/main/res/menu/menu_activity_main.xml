@@ -10,7 +10,7 @@
     <item
         android:id="@+id/action_me"
         android:orderInCategory="100"
-        android:title="MYTestAction"
+        android:title="Sign in"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_credit"
