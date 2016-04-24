@@ -96,9 +96,6 @@ import android.content.Context;
 
         }
 
-
-
-
         // Return the size of your dataset (invoked by the layout manager)
         @Override
         public int getItemCount() {

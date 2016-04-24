@@ -89,7 +89,7 @@ public class ProductGridAdapter extends RecyclerView.Adapter<ProductGridAdapter.
         final Product p = filtered_items.get(position);
         holder.title.setText(p.getName());
         holder.like.setText("" + p.getLike());
-        holder.price.setText("" + p.getPrice());
+        holder.price.setText("$" + p.getPrice());
         try {
             if (p.getPhoto().get(0).startsWith("http"))
                 ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);

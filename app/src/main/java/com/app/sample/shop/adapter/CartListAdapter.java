@@ -101,10 +101,16 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
         Cart_Product cart_product = (Cart_Product) new Select().from(Cart_Product.class).where("ProductID = ?", p.getPID()).execute().get(0);
         holder.total.setText(cart_product.Quantity + " X");
         holder.price.setText("$ " + p.getPrice());
-        if (p.getPhoto().get(0).startsWith("http"))
-            ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);
-        else
-            ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto().get(0), holder.image);
+        try{
+            if (p.getPhoto().get(0).startsWith("http"))
+                ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);
+            else
+                ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto().get(0), holder.image);
+
+        }catch (Exception e){
+
+        }
+
 
         holder.lyt_parent.setOnClickListener(new View.OnClickListener() {
             @Override
