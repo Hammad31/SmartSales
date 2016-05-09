@@ -109,7 +109,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
             if (product.getPhoto().get(i).startsWith("http"))
                 url_maps.put("" + i, product.getPhoto().get(i));
             else
-                url_maps.put("" + i, "http://hamoha.com/Project/Image/" + product.getPhoto().get(i));
+                url_maps.put("" + i, "http://hamoha.com/Project/" + product.getPhoto().get(i));
         }
         for (String name : url_maps.keySet()) {
             TextSliderView textSliderView = new TextSliderView(this);

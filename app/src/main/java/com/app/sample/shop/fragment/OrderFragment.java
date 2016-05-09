@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -159,7 +160,7 @@ public class OrderFragment extends Fragment {
                     }
                 }
             } catch (Exception e) {
-
+                Log.e(e.getMessage() + " ", "Exception");
             } finally {
                 if (connection != null)
                     connection.disconnect();
@@ -167,6 +168,7 @@ public class OrderFragment extends Fragment {
                     if (reader != null)
                         reader.close();
                 } catch (IOException e) {
+                    Log.e(e.getMessage() + " ", "Exception");
                     e.printStackTrace();
                 }
             }

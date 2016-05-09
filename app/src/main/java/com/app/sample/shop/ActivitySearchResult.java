@@ -162,7 +162,7 @@ public class ActivitySearchResult extends AppCompatActivity {
                     }
                 }
             } catch (JSONException e) {
-//                 TODO Auto-generated catch block
+                Log.e(e.getMessage() + " ", "SEO Exception");
                 e.printStackTrace();
             }
             return null;
@@ -217,7 +217,7 @@ public class ActivitySearchResult extends AppCompatActivity {
                     }
                 }
             } catch (JSONException e) {
-//                 TODO Auto-generated catch block
+                Log.e(e.getMessage() + " ", "Normal Exception");
                 e.printStackTrace();
             }
             return null;

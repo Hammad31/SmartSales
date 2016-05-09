@@ -94,7 +94,7 @@ public class ProductGridAdapter extends RecyclerView.Adapter<ProductGridAdapter.
             if (p.getPhoto().get(0).startsWith("http"))
                 ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);
             else
-                ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto().get(0), holder.image);
+                ImageLoader.getInstance().displayImage("http://hamoha.com/Project/" + p.getPhoto().get(0), holder.image);
 
         }catch (Exception e){
             System.out.println("No Images, Product ID: " + p.getPID());

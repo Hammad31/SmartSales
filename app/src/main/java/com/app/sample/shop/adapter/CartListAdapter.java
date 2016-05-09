@@ -105,7 +105,7 @@ public class CartListAdapter extends RecyclerView.Adapter<CartListAdapter.ViewHo
             if (p.getPhoto().get(0).startsWith("http"))
                 ImageLoader.getInstance().displayImage(p.getPhoto().get(0), holder.image);
             else
-                ImageLoader.getInstance().displayImage("http://hamoha.com/Project/Image/" + p.getPhoto().get(0), holder.image);
+                ImageLoader.getInstance().displayImage("http://hamoha.com/Project/" + p.getPhoto().get(0), holder.image);
 
         }catch (Exception e){
 
