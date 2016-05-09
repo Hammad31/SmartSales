@@ -73,6 +73,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
     private boolean in_cart = false;
     private boolean liked_before;
     private ImageView icon_like;
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -278,22 +279,27 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
     public void actionClick(View view) {
         switch (view.getId()) {
             case R.id.lyt_likes:
-                if (liked_before) {
-                    try {
-                        new UnLikeProduct().execute().get();
-                        Snackbar.make(view, "UnLiked", Snackbar.LENGTH_SHORT).show();
-
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "UnLikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                if (sessionManager.isLoggedIn()) {
+                    Snackbar.make(view, "You must sign in :)", Snackbar.LENGTH_SHORT).show();
 
                 } else {
-                    try {
-                        new LikeProduct().execute().get();
-                        Snackbar.make(view, "Liked", Snackbar.LENGTH_SHORT).show();
+                    if (liked_before) {
+                        try {
+                            new UnLikeProduct().execute().get();
+                            Snackbar.make(view, "UnLiked", Snackbar.LENGTH_SHORT).show();
 
-                    } catch (Exception e) {
-                        Toast.makeText(getApplicationContext(), "LikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "UnLikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
+                    } else {
+                        try {
+                            new LikeProduct().execute().get();
+                            Snackbar.make(view, "Liked", Snackbar.LENGTH_SHORT).show();
+
+                        } catch (Exception e) {
+                            Toast.makeText(getApplicationContext(), "LikeProduct: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
                     }
                 }
                 break;
