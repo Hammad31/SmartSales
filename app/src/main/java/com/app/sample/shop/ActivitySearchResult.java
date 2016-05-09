@@ -151,7 +151,6 @@ public class ActivitySearchResult extends AppCompatActivity {
                         int sales = JSONPro.getInt("sales");
                         String info = JSONPro.getString("info");
                         String properties = JSONPro.getString("properties");
-
                         JSONArray photos = JSONPro.getJSONArray("images");
                         ArrayList<String> images_links = new ArrayList<>();
                         for (int j = 0; j < photos.length(); j++) {
