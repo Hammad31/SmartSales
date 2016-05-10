@@ -279,7 +279,7 @@ public class ActivityItemDetails extends AppCompatActivity implements ViewPagerE
     public void actionClick(View view) {
         switch (view.getId()) {
             case R.id.lyt_likes:
-                if (sessionManager.isLoggedIn()) {
+                if (!sessionManager.isLoggedIn()) {
                     Snackbar.make(view, "You must sign in :)", Snackbar.LENGTH_SHORT).show();
 
                 } else {

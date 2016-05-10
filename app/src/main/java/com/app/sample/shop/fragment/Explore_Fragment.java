@@ -1,5 +1,7 @@
 package com.app.sample.shop.fragment;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.app.sample.shop.ActivityBestProducts;
+import com.app.sample.shop.ActivityLastProducts;
 import com.app.sample.shop.ActivityMain;
 import com.app.sample.shop.R;
 import com.app.sample.shop.data.GlobalVariable;
@@ -49,11 +53,15 @@ public class Explore_Fragment extends Fragment {
         lastProductsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment fragment = new CategoryFragment();
+               /* Fragment fragment = new CategoryFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frame_content, fragment);
                 fragmentTransaction.commit();
+                */
+                Intent j = new Intent(getActivity(), ActivityLastProducts.class);
+                startActivity(j);
+
 
 
                 Toast.makeText(getContext(), "Last Products", Toast.LENGTH_SHORT).show();
@@ -62,11 +70,16 @@ public class Explore_Fragment extends Fragment {
         bestProductsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /*
                 Fragment fragment = new CategoryFragment();
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.frame_content, fragment);
                 fragmentTransaction.commit();
+                */
+
+                Intent j = new Intent(getActivity(), ActivityBestProducts.class);
+                startActivity(j);
 
                 Toast.makeText(getContext(), "Best Products", Toast.LENGTH_SHORT).show();
             }

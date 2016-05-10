@@ -93,7 +93,7 @@ public class OrderFragment extends Fragment {
             HttpURLConnection connection = null;
             BufferedReader reader = null;
             try {
-                URL url = new URL("http://hamoha.com/Project/getOrders?CID=" + sessionManager.getCurrentCustomerID());
+                URL url = new URL("http://hamoha.com/test/getOrders?CID=" + sessionManager.getCurrentCustomerID());
 //                URL url = new URL ("http://hamoha.com/Project/getOrders");
                 connection = (HttpURLConnection) url.openConnection();
                 connection.connect();
@@ -109,6 +109,8 @@ public class OrderFragment extends Fragment {
                 // Convert to JSON
                 String finalJSON = buffer.toString();
                 JSONObject parentObject = new JSONObject(finalJSON);
+                System.out.println("I am here...");
+                System.out.println(buffer.toString());
                 JSONArray parentArray = parentObject.getJSONArray("Orders");
 
                 if (parentArray.length() < 1) {
@@ -148,10 +150,10 @@ public class OrderFragment extends Fragment {
                             int sales = 0;
                             String info = Product.getString("info");
                             String properties = null;
-                            JSONArray photos = Product.getJSONArray("images");
+                            //JSONArray photos = Product.getJSONArray("images");
                             ArrayList<String> images_links = new ArrayList<>();
-                            for (int j = 0; j < photos.length(); j++) {
-                                images_links.add(photos.getString(j));
+                            for (int j = 0; j < 1; j++) {
+                                images_links.add(Product.getString("link"));
                             }
 
                             orderProductsList.add(new Order_Products(OrderIDForSingleOrderProduct, ProductID, quantityForJSONSingleOrderProduct, new Product(images_links, price, date, CUID, CATALOGCatalogID, ComID, PID, quantity, info, type, name, like, sales, properties)));

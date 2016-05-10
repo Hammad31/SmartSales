@@ -222,8 +222,11 @@ public class ActivityMain extends AppCompatActivity {
                 actionBar.setTitle(R.string.menu_cart);
                 break;
             case R.id.action_credit:
-                Intent h = new Intent(getApplicationContext(), MapsActivity.class);
-                startActivity(h);
+                AlertDialog.Builder builder2 = new AlertDialog.Builder(this);
+                builder2.setTitle("Credit");
+                builder2.setMessage("Thanks to all our professors specially Dr.Ziani :)");
+                builder2.setNeutralButton("OK", null);
+                builder2.show();
                 break;
             case R.id.action_settings:
                 sessionManager.logoutUser();// just for Testing logout (must remove)
@@ -269,6 +272,7 @@ public class ActivityMain extends AppCompatActivity {
                 fragment = new Explore_Fragment();
                 break;
             case R.id.nav_search:
+                fragment = new Home_Page_Fragment();
                 break;
 
             //sub menu
@@ -286,7 +290,14 @@ public class ActivityMain extends AppCompatActivity {
                 //bundle.putString(CategoryFragment.TAG_CATEGORY, title);
                 break;
             case R.id.nav_profile:
-                fragment = new ProfileFragment();
+                if (sessionManager.isLoggedIn()) {
+
+                    fragment = new ProfileFragment();
+                } else {
+                    fragment = new Home_Page_Fragment();
+                    Toast.makeText(getApplicationContext(), "You Must Login ...", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             default:
                 break;

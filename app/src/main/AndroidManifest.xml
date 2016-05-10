@@ -12,8 +12,6 @@
     <!-- for card.io card scanning -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.VIBRATE" />
-
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
@@ -82,28 +80,22 @@
         <activity android:name=".ActivityAddCreditCard" />
         <activity
             android:name=".ActivitySearchResult"
-            android:label="@string/title_activity_activity_search_result"></activity>
-        <activity android:name=".ActicityCheckout"></activity>
+            android:label="@string/title_activity_activity_search_result" />
+        <activity android:name=".ActicityCheckout" />
 
-        <!--Paypal Integration-->
+        <!-- Paypal Integration -->
         <service
             android:name="com.paypal.android.sdk.payments.PayPalService"
-            android:exported="false"/>
+            android:exported="false" />
 
-        <activity
-            android:name="com.paypal.android.sdk.payments.PaymentActivity"/>
-        <activity
-            android:name="com.paypal.android.sdk.payments.LoginActivity"/>
-        <activity
-            android:name="com.paypal.android.sdk.payments.PaymentMethodActivity"/>
-        <activity
-            android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity"/>
+        <activity android:name="com.paypal.android.sdk.payments.PaymentActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.LoginActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentMethodActivity" />
+        <activity android:name="com.paypal.android.sdk.payments.PaymentConfirmActivity" />
         <activity
             android:name="io.card.payment.CardIOActivity"
-            android:configChanges="keyboardHidden|orientation"/>
-        <activity
-            android:name="io.card.payment.DataEntryActivity"/>
-
+            android:configChanges="keyboardHidden|orientation" />
+        <activity android:name="io.card.payment.DataEntryActivity" />
 
         <meta-data
             android:name="AA_DB_NAME"
@@ -115,6 +107,8 @@
             android:name="AA_MODELS"
             android:value="com.app.sample.shop.model.Cart_Product" />
 
+        <activity android:name=".ActivityBestProducts" />
+        <activity android:name=".ActivityLastProducts"></activity>
     </application>
 
 </manifest>
